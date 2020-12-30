@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,10 @@
 		F30E1FBC259C9AA60080A338 /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FBB259C9AA60080A338 /* ListVC.swift */; };
 		F30E1FC1259C9BA60080A338 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FC0259C9BA60080A338 /* SettingManager.swift */; };
 		F30E1FC5259CA1470080A338 /* NavVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FC4259CA1470080A338 /* NavVC.swift */; };
+		F30E1FCC259CB14B0080A338 /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FCB259CB14B0080A338 /* SettingVC.swift */; };
+		F30E1FCF259CB2500080A338 /* FontListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FCE259CB2500080A338 /* FontListVC.swift */; };
+		F30E1FD7259CCF980080A338 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FD6259CCF980080A338 /* Color.swift */; };
+		F30E1FDA259CCFEF0080A338 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FD9259CCFEF0080A338 /* View.swift */; };
 		F3D6E1E9259C8B210030CABB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D6E1E8259C8B210030CABB /* AppDelegate.swift */; };
 		F3D6E1EB259C8B210030CABB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D6E1EA259C8B210030CABB /* SceneDelegate.swift */; };
 		F3D6E1F0259C8B210030CABB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3D6E1EE259C8B210030CABB /* Main.storyboard */; };
@@ -28,6 +32,10 @@
 		F30E1FBB259C9AA60080A338 /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
 		F30E1FC0259C9BA60080A338 /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
 		F30E1FC4259CA1470080A338 /* NavVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavVC.swift; sourceTree = "<group>"; };
+		F30E1FCB259CB14B0080A338 /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
+		F30E1FCE259CB2500080A338 /* FontListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontListVC.swift; sourceTree = "<group>"; };
+		F30E1FD6259CCF980080A338 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		F30E1FD9259CCFEF0080A338 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		F3D6E1E5259C8B210030CABB /* BooksReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BooksReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3D6E1E8259C8B210030CABB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3D6E1EA259C8B210030CABB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,7 +64,6 @@
 				00C3C7AE1F91F4C660FCB517 /* Pods-BooksReader.debug.xcconfig */,
 				DC11343A6CE9D24EC38FB641 /* Pods-BooksReader.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -74,8 +81,26 @@
 				F30E1FC4259CA1470080A338 /* NavVC.swift */,
 				F30E1FBB259C9AA60080A338 /* ListVC.swift */,
 				F30E1FB7259C94AB0080A338 /* ReaderVC.swift */,
+				F30E1FCB259CB14B0080A338 /* SettingVC.swift */,
+				F30E1FCE259CB2500080A338 /* FontListVC.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		F30E1FD3259CC7D70080A338 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		F30E1FD5259CCF710080A338 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F30E1FD6259CCF980080A338 /* Color.swift */,
+				F30E1FD9259CCFEF0080A338 /* View.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		F3D6E1DC259C8B210030CABB = {
@@ -100,7 +125,9 @@
 			isa = PBXGroup;
 			children = (
 				F3D6E1FE259C8B790030CABB /* Resources */,
+				F30E1FD5259CCF710080A338 /* Extensions */,
 				F3D6E202259C8C220030CABB /* Models */,
+				F30E1FD3259CC7D70080A338 /* ViewModels */,
 				F30E1FBF259C9B5E0080A338 /* ViewControllers */,
 				F3D6E1E8259C8B210030CABB /* AppDelegate.swift */,
 				F3D6E1EA259C8B210030CABB /* SceneDelegate.swift */,
@@ -244,11 +271,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				F30E1FC5259CA1470080A338 /* NavVC.swift in Sources */,
+				F30E1FCC259CB14B0080A338 /* SettingVC.swift in Sources */,
+				F30E1FDA259CCFEF0080A338 /* View.swift in Sources */,
 				F30E1FC1259C9BA60080A338 /* SettingManager.swift in Sources */,
 				F30E1FBC259C9AA60080A338 /* ListVC.swift in Sources */,
 				F30E1FB8259C94AB0080A338 /* ReaderVC.swift in Sources */,
 				F3D6E1E9259C8B210030CABB /* AppDelegate.swift in Sources */,
 				F3D6E1EB259C8B210030CABB /* SceneDelegate.swift in Sources */,
+				F30E1FCF259CB2500080A338 /* FontListVC.swift in Sources */,
+				F30E1FD7259CCF980080A338 /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

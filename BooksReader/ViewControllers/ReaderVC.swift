@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import KUIPopOver
+
 
 class ReaderVC: UIViewController {
     
@@ -36,7 +38,7 @@ class ReaderVC: UIViewController {
     
     func configUI() {
         navigationController?.navigationBar.barTintColor = SettingManager.bkColor
-        navigationController?.navigationBar.tintColor = SettingManager.txtColor
+        navigationController?.navigationBar.tintColor = SettingManager.toolColor
         //navigationController?.navigationBar.isTranslucent = false
         
         view.backgroundColor = SettingManager.bkColor
@@ -56,8 +58,9 @@ class ReaderVC: UIViewController {
     }
     
     
-    @objc func navBtnSettingTapped(_ sender: Any) {
-        
+    @objc func navBtnSettingTapped(_ sender: UIBarButtonItem) {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "SettingVC") as? SettingVC else { return }
+        vc.showPopoverWithNavigationController(barButtonItem: sender, shouldDismissOnTap: true)
     }
     
     

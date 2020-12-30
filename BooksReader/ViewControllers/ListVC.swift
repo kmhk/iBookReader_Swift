@@ -26,7 +26,7 @@ class ListVC: UIViewController {
     
     func configUI() {
         navigationController?.navigationBar.barTintColor = SettingManager.bkColor
-        navigationController?.navigationBar.tintColor = SettingManager.txtColor
+        navigationController?.navigationBar.tintColor = SettingManager.toolColor
         //navigationController?.navigationBar.isTranslucent = false
         
         view.backgroundColor = SettingManager.bkColor
