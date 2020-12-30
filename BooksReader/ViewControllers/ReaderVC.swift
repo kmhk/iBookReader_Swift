@@ -9,6 +9,10 @@ import UIKit
 
 class ReaderVC: UIViewController {
     
+    override var prefersStatusBarHidden: Bool {
+        return (SettingManager.readMode == .fullscreen ? true : false)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -68,6 +72,8 @@ class ReaderVC: UIViewController {
         if SettingManager.changeReadMode() == .fullscreen {
             UIView.animate(withDuration: 0.2) {
                 self.navigationController?.navigationBar.alpha = 0.0
+                self.setNeedsStatusBarAppearanceUpdate()
+                
             } completion: { (finished) in
                 self.navigationController?.navigationBar.isHidden = true
             }
@@ -78,13 +84,13 @@ class ReaderVC: UIViewController {
             
             UIView.animate(withDuration: 0.2) {
                 self.navigationController?.navigationBar.alpha = 1.0
+                self.setNeedsStatusBarAppearanceUpdate()
+                
             } completion: { (finished) in
                 self.navigationController?.navigationBar.alpha = 1.0
                 self.navigationController?.navigationBar.isHidden = false
             }
         }
-        
-        navigationController?.setNeedsStatusBarAppearanceUpdate()
     }
     
 }

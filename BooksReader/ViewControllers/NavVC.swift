@@ -12,11 +12,6 @@ class NavVC: UINavigationController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return (SettingManager.theme.rawValue > 1 ? .lightContent : .darkContent)
     }
-    
-    
-    override var prefersStatusBarHidden: Bool {
-        return true//(SettingManager.readMode == .fullscreen ? true : false)
-    }
 
 
     override func viewDidLoad() {
