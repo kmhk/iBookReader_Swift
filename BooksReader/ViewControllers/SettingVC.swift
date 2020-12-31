@@ -84,12 +84,18 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     // MARK: actions
     
     @IBAction func btnFontSmallTapped(_ sender: Any) {
+        if SettingManager.fontSize > 12 {
+            SettingManager.fontSize -= 2
+        }
         
         delegate?.chosenMode()
     }
     
     
     @IBAction func btnFontLargeTapped(_ sender: Any) {
+        if SettingManager.fontSize < 36 {
+            SettingManager.fontSize += 2
+        }
         
         delegate?.chosenMode()
     }
