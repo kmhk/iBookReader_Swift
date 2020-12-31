@@ -16,6 +16,8 @@
 		F30E1FCF259CB2500080A338 /* FontListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FCE259CB2500080A338 /* FontListVC.swift */; };
 		F30E1FD7259CCF980080A338 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FD6259CCF980080A338 /* Color.swift */; };
 		F30E1FDA259CCFEF0080A338 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FD9259CCFEF0080A338 /* View.swift */; };
+		F30E1FDD259D65FB0080A338 /* ContentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FDC259D65FB0080A338 /* ContentManager.swift */; };
+		F30E1FE0259DEEBD0080A338 /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30E1FDF259DEEBD0080A338 /* NSAttributedString.swift */; };
 		F3D6E1E9259C8B210030CABB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D6E1E8259C8B210030CABB /* AppDelegate.swift */; };
 		F3D6E1EB259C8B210030CABB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D6E1EA259C8B210030CABB /* SceneDelegate.swift */; };
 		F3D6E1F0259C8B210030CABB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3D6E1EE259C8B210030CABB /* Main.storyboard */; };
@@ -36,6 +38,8 @@
 		F30E1FCE259CB2500080A338 /* FontListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontListVC.swift; sourceTree = "<group>"; };
 		F30E1FD6259CCF980080A338 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		F30E1FD9259CCFEF0080A338 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		F30E1FDC259D65FB0080A338 /* ContentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentManager.swift; sourceTree = "<group>"; };
+		F30E1FDF259DEEBD0080A338 /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
 		F3D6E1E5259C8B210030CABB /* BooksReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BooksReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3D6E1E8259C8B210030CABB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3D6E1EA259C8B210030CABB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 			children = (
 				F30E1FD6259CCF980080A338 /* Color.swift */,
 				F30E1FD9259CCFEF0080A338 /* View.swift */,
+				F30E1FDF259DEEBD0080A338 /* NSAttributedString.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -151,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				F30E1FC0259C9BA60080A338 /* SettingManager.swift */,
+				F30E1FDC259D65FB0080A338 /* ContentManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -274,8 +280,10 @@
 				F30E1FCC259CB14B0080A338 /* SettingVC.swift in Sources */,
 				F30E1FDA259CCFEF0080A338 /* View.swift in Sources */,
 				F30E1FC1259C9BA60080A338 /* SettingManager.swift in Sources */,
+				F30E1FDD259D65FB0080A338 /* ContentManager.swift in Sources */,
 				F30E1FBC259C9AA60080A338 /* ListVC.swift in Sources */,
 				F30E1FB8259C94AB0080A338 /* ReaderVC.swift in Sources */,
+				F30E1FE0259DEEBD0080A338 /* NSAttributedString.swift in Sources */,
 				F3D6E1E9259C8B210030CABB /* AppDelegate.swift in Sources */,
 				F3D6E1EB259C8B210030CABB /* SceneDelegate.swift in Sources */,
 				F30E1FCF259CB2500080A338 /* FontListVC.swift in Sources */,

@@ -25,6 +25,8 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     
     @IBOutlet var btnThemes: [UIButton]!
     
+    var delegate: ReaderViewControllerDelegate?
+    
     
     var contentSize: CGSize {
         return CGSize(width: 250, height: 190)
@@ -35,7 +37,6 @@ class SettingVC: UIViewController, KUIPopOverUsable {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        configUI()
     }
     
     
@@ -43,6 +44,8 @@ class SettingVC: UIViewController, KUIPopOverUsable {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.isHidden = true
+        
+        configUI()
     }
     
     
@@ -81,16 +84,21 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     // MARK: actions
     
     @IBAction func btnFontSmallTapped(_ sender: Any) {
+        
+        delegate?.chosenMode()
     }
     
     
     @IBAction func btnFontLargeTapped(_ sender: Any) {
+        
+        delegate?.chosenMode()
     }
     
     
     @IBAction func btnFontListTapped(_ sender: Any) {
         guard let vc = storyboard?.instantiateViewController(identifier: "FontListVC") as? FontListVC else { return }
         vc.type = .font
+        vc.delegate = delegate
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -98,6 +106,7 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     @IBAction func btnLanguageListTapped(_ sender: Any) {
         guard let vc = storyboard?.instantiateViewController(identifier: "FontListVC") as? FontListVC else { return }
         vc.type = .language
+        vc.delegate = delegate
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -107,6 +116,8 @@ class SettingVC: UIViewController, KUIPopOverUsable {
         
         SettingManager.changeTheme(ThemeStyle(rawValue: tag)!)
         configUI()
+        
+        delegate?.chosenMode()
     }
     
 }

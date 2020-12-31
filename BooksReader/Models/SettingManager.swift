@@ -23,14 +23,14 @@ enum ReadMode: Int {
 }
 
 
-enum LanguageMode: String {
+enum LanguageMode: String, CaseIterable {
     case hebrew = "Hebrew"
     case english = "English"
     case both = "Hebrew / English"
 }
 
 
-enum FontName: String {
+enum FontName: String, CaseIterable {
     case helvetica = "Helvetica"
     case avenir = "Avenir"
     case charter = "Charter"
@@ -52,10 +52,34 @@ class SettingManager {
     
     static var readMode: ReadMode = .normal
     
-    static var languageMode: LanguageMode = .both
+    static var languageMode: LanguageMode = .english
     
-    static var fontSize: CGFloat = 14.0
+    static var fontSize: CGFloat = 21
     static var fontName: FontName = .helvetica
+    
+    static var titleParagraphStyle: NSMutableParagraphStyle = {
+        let p = NSMutableParagraphStyle()
+        p.alignment = .center
+        p.lineBreakMode = .byWordWrapping
+        p.lineSpacing = 2
+        return p
+    }()
+    
+    static var hebrewParagraphStyle: NSMutableParagraphStyle = {
+        let p = NSMutableParagraphStyle()
+        p.alignment = .right
+        p.lineBreakMode = .byWordWrapping
+        p.lineSpacing = 2
+        return p
+    }()
+    
+    static var engParagraphStyle: NSMutableParagraphStyle = {
+        let p = NSMutableParagraphStyle()
+        p.alignment = .left
+        p.lineBreakMode = .byWordWrapping
+        p.lineSpacing = 2
+        return p
+    }()
     
     
     static func changeReadMode() -> ReadMode {

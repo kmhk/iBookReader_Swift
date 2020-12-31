@@ -9,11 +9,19 @@ import UIKit
 import KUIPopOver
 
 
+protocol ReaderViewControllerDelegate {
+    func chosenMode()
+}
+
+
 class ReaderVC: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
     
     override var prefersStatusBarHidden: Bool {
         return (SettingManager.readMode == .fullscreen ? true : false)
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +36,12 @@ class ReaderVC: UIViewController {
         // init tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         view.addGestureRecognizer(tapGesture)
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        // more config
         configUI()
     }
     
@@ -42,6 +54,10 @@ class ReaderVC: UIViewController {
         //navigationController?.navigationBar.isTranslucent = false
         
         view.backgroundColor = SettingManager.bkColor
+        
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        tableView.reloadData()
     }
     
 
@@ -60,6 +76,7 @@ class ReaderVC: UIViewController {
     
     @objc func navBtnSettingTapped(_ sender: UIBarButtonItem) {
         guard let vc = storyboard?.instantiateViewController(withIdentifier: "SettingVC") as? SettingVC else { return }
+        vc.delegate = self
         vc.showPopoverWithNavigationController(barButtonItem: sender, shouldDismissOnTap: true)
     }
     
@@ -94,6 +111,52 @@ class ReaderVC: UIViewController {
                 self.navigationController?.navigationBar.isHidden = false
             }
         }
+    }
+    
+}
+
+
+// MARK: - UITableView data source & delegate
+extension ReaderVC: UITableViewDataSource, UITableViewDelegate {
+    
+    func heightOfString(_ indexPath: IndexPath) -> CGFloat {
+        let w = tableView.frame.width // width of title label
+        let str = ContentManager.shared.attributString(indexPath)
+        return str.sizeFittingWidth(w).height
+//        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
+//        let rt = str.boundingRect(with: constBox, options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil).integral
+//        return rt.height + 50
+    }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ReaderTVCell", for: indexPath)
+        
+        let text = ContentManager.shared.attributString(indexPath)
+        
+        cell.textLabel?.attributedText = text
+        cell.textLabel?.numberOfLines = Int(heightOfString(indexPath)) / Int(SettingManager.fontSize)
+        
+        return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return heightOfString(indexPath) + 50
+    }
+}
+
+
+// MARK: - ReaderViewController delegate
+extension ReaderVC: ReaderViewControllerDelegate {
+    
+    func chosenMode() {
+        configUI()
     }
     
 }
