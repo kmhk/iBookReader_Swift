@@ -9,6 +9,9 @@ import UIKit
 
 class ListVC: UIViewController {
 
+    @IBOutlet weak var tableView: UITableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,6 +44,33 @@ class ListVC: UIViewController {
         transition.type = .fade
         navigationController?.view.layer.add(transition, forKey: kCATransition)
         navigationController?.popViewController(animated: false)
+    }
+
+}
+
+
+// MARK: - UITableView data source & delegate
+extension ListVC: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ListTVCell", for: indexPath)
+        
+        let text = ContentManager.shared.stringTitle(indexPath.row)
+        
+        cell.textLabel?.text = text
+        cell.textLabel?.textColor = SettingManager.txtColor
+        
+        return cell
+    }
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
 
 }

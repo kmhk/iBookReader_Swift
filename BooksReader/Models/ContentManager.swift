@@ -32,10 +32,33 @@ class ContentManager {
     }
     
     
+    func stringTitle(_ indexPath: Int) -> String {
+        let index = (SettingManager.languageMode == .both ? indexPath / 2 : indexPath)
+        
+        let dict = ContentManager.shared.contents[index]
+        
+        var title = ""
+        
+        if SettingManager.languageMode == .hebrew {
+            title = dict["hebrew_chapter"] ?? ""
+        } else if SettingManager.languageMode == .english {
+            title = dict["english_chapter"] ?? ""
+        } else if SettingManager.languageMode == .both {
+            if indexPath % 2 == 0 {
+                title = dict["hebrew_chapter"] ?? ""
+            } else {
+                title = dict["english_chapter"] ?? ""
+            }
+        }
+        
+        return title
+    }
+    
+    
     func attributString(_ indexPath: IndexPath) -> NSAttributedString {
         let index = (SettingManager.languageMode == .both ? indexPath.row / 2 : indexPath.row)
         
-        print("getting \(SettingManager.languageMode.rawValue) text for \(index)th contents")
+        //print("getting \(SettingManager.languageMode.rawValue) text for \(index)th contents")
         
         let dict = ContentManager.shared.contents[index]
         

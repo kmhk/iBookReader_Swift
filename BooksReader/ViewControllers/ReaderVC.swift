@@ -7,6 +7,7 @@
 
 import UIKit
 import KUIPopOver
+import VerticalSlider
 
 
 protocol ReaderViewControllerDelegate {
@@ -17,6 +18,10 @@ protocol ReaderViewControllerDelegate {
 class ReaderVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var viewStatus: UIView!
+    @IBOutlet weak var viewSliderStatus: UILabel!
+    @IBOutlet weak var slider: VerticalSlider!
+    
     
     override var prefersStatusBarHidden: Bool {
         return (SettingManager.readMode == .fullscreen ? true : false)
@@ -36,6 +41,11 @@ class ReaderVC: UIViewController {
         // init tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         view.addGestureRecognizer(tapGesture)
+        
+        slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        slider.minimumValue = 1
+        
+        viewSliderStatus.rounded(radius: 10)
     }
     
     
@@ -55,9 +65,34 @@ class ReaderVC: UIViewController {
         
         view.backgroundColor = SettingManager.bkColor
         
+        if let v = viewStatus.viewWithTag(100) as? UILabel {
+            v.textColor = SettingManager.txtColor
+            viewStatus.backgroundColor = SettingManager.bkColor
+        }
+        
+        slider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
+        slider.minimumTrackTintColor = SettingManager.toolColor
+        slider.slider.setThumbImage(createThumbImage(), for: .normal)
+        
+        slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        
+        viewSliderStatus.textColor = .white
+        
         self.setNeedsStatusBarAppearanceUpdate()
         
         tableView.reloadData()
+    }
+    
+    
+    func createThumbImage() -> UIImage {
+        UIGraphicsBeginImageContext(CGSize(width: 8, height: 8))
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(SettingManager.toolColor.cgColor)
+        context?.fillEllipse(in: CGRect(x: 0, y: 0, width: 8, height: 8))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
     }
     
 
@@ -86,33 +121,107 @@ class ReaderVC: UIViewController {
     }
 
     
+    @IBAction func sliderValueChanged(_ sender: Any) {
+        let page = Int(slider.value)
+        //print("value changed slider: page = \(page)")
+        
+        viewSliderStatus.text = ContentManager.shared.stringTitle(page - 1)
+        tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+    }
+    
+    
+    @IBAction func sliderDragEnter(_ sender: Any) {
+        let page = Int(slider.value)
+//        print("enter to slider drag: page = \(page)")
+        
+        viewSliderStatus.text = ContentManager.shared.stringTitle(page)
+        tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        
+        if viewSliderStatus.isHidden == false {
+            return
+        }
+        
+        viewSliderStatus.isHidden = false
+        viewSliderStatus.alpha = 0.0
+        UIView.animate(withDuration: 0.1) {
+            self.viewSliderStatus.alpha = 1.0
+        }
+    }
+    
+    
+    @IBAction func sliderDragExit(_ sender: Any) {
+        let page = Int(slider.value)
+//        print("exit from slider drag: page = \(page)")
+        
+        viewSliderStatus.text = ContentManager.shared.stringTitle(page)
+        tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        
+        if viewSliderStatus.isHidden == true {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.1) {
+            self.viewSliderStatus.alpha = 0.0
+        } completion: { (flage) in
+            self.viewSliderStatus.isHidden = true
+        }
+    }
+    
+    
     // MARK: methods
     
     func changeReadMode() {
         if SettingManager.changeReadMode() == .fullscreen {
             UIView.animate(withDuration: 0.2) {
                 self.navigationController?.navigationBar.alpha = 0.0
+                self.viewStatus.alpha = 0
+                self.viewSliderStatus.alpha = 0
+                self.slider.alpha = 0
                 self.setNeedsStatusBarAppearanceUpdate()
                 
             } completion: { (finished) in
                 self.navigationController?.navigationBar.isHidden = true
+                self.viewStatus.isHidden = true
+                self.viewSliderStatus.isHidden = true
+                self.slider.isHidden = true
             }
             
         } else {
             navigationController?.navigationBar.alpha = 0.0
+            self.viewStatus.alpha = 0
+            self.viewSliderStatus.alpha = 0
+            self.slider.alpha = 0
             navigationController?.navigationBar.isHidden = false
             
             UIView.animate(withDuration: 0.2) {
                 self.navigationController?.navigationBar.alpha = 1.0
+                self.viewStatus.alpha = 1.0
+                self.viewSliderStatus.alpha = 0.0
+                self.slider.alpha = 1.0
                 self.setNeedsStatusBarAppearanceUpdate()
                 
             } completion: { (finished) in
                 self.navigationController?.navigationBar.alpha = 1.0
                 self.navigationController?.navigationBar.isHidden = false
+                self.viewStatus.isHidden = false
+                self.viewSliderStatus.isHidden = true
+                self.slider.isHidden = false
             }
         }
     }
     
+    
+    func setStatusView(_ page: Int) {
+        let max = ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
+        let pageNum = page + 1
+        
+        if let v = viewStatus.viewWithTag(100) as? UILabel {
+            v.text = "\(pageNum) of \(max)"
+        }
+    }
+    
+    
+    //func showSliderStatus
 }
 
 
@@ -149,6 +258,29 @@ extension ReaderVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return heightOfString(indexPath) + 50
     }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        var rows = [Int]()
+        if let indices = tableView.indexPathsForVisibleRows {
+            for cell in indices {
+                let rect = tableView.rectForRow(at: cell)
+                let rectInScreen = tableView.convert(rect, to: self.view)
+                if rectInScreen.minY < tableView.frame.height / 2 {
+                    rows.append(cell.row)
+                }
+            }
+        }
+        
+        if let page = rows.last {
+            setStatusView(page)
+            slider.value = Float(page) + 1
+        } else {
+            setStatusView(0)
+            slider.value = 1
+        }
+    }
+    
 }
 
 
