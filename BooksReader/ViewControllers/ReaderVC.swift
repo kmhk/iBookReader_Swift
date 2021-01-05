@@ -12,6 +12,7 @@ import VerticalSlider
 
 protocol ReaderViewControllerDelegate {
     func chosenMode()
+    func seekToChapter(_ index: Int)
 }
 
 
@@ -44,6 +45,8 @@ class ReaderVC: UIViewController {
         
         slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
         slider.minimumValue = 1
+        
+        setStatusView(0)
         
         viewSliderStatus.rounded(radius: 10)
     }
@@ -101,6 +104,8 @@ class ReaderVC: UIViewController {
     @objc func navBtnListTapped(_ sender: Any) {
         guard let vc = storyboard?.instantiateViewController(identifier: "ListVC") as? ListVC else { return }
         
+        vc.delegate = self
+        
         let transition = CATransition()
         transition.duration = 0.2
         transition.type = .fade
@@ -123,19 +128,21 @@ class ReaderVC: UIViewController {
     
     @IBAction func sliderValueChanged(_ sender: Any) {
         let page = Int(slider.value)
-        //print("value changed slider: page = \(page)")
+        print("value changed slider: page = \(page)")
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page - 1)
         tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        setStatusView(page)
     }
     
     
     @IBAction func sliderDragEnter(_ sender: Any) {
         let page = Int(slider.value)
-//        print("enter to slider drag: page = \(page)")
+        print("enter to slider drag: page = \(page)")
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
         tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        setStatusView(page)
         
         if viewSliderStatus.isHidden == false {
             return
@@ -151,10 +158,11 @@ class ReaderVC: UIViewController {
     
     @IBAction func sliderDragExit(_ sender: Any) {
         let page = Int(slider.value)
-//        print("exit from slider drag: page = \(page)")
+        print("exit from slider drag: page = \(page)")
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
         tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        setStatusView(page)
         
         if viewSliderStatus.isHidden == true {
             return
@@ -177,13 +185,13 @@ class ReaderVC: UIViewController {
                 self.viewStatus.alpha = 0
                 self.viewSliderStatus.alpha = 0
                 self.slider.alpha = 0
-                self.setNeedsStatusBarAppearanceUpdate()
                 
             } completion: { (finished) in
                 self.navigationController?.navigationBar.isHidden = true
                 self.viewStatus.isHidden = true
                 self.viewSliderStatus.isHidden = true
                 self.slider.isHidden = true
+                self.setNeedsStatusBarAppearanceUpdate()
             }
             
         } else {
@@ -198,7 +206,6 @@ class ReaderVC: UIViewController {
                 self.viewStatus.alpha = 1.0
                 self.viewSliderStatus.alpha = 0.0
                 self.slider.alpha = 1.0
-                self.setNeedsStatusBarAppearanceUpdate()
                 
             } completion: { (finished) in
                 self.navigationController?.navigationBar.alpha = 1.0
@@ -206,6 +213,7 @@ class ReaderVC: UIViewController {
                 self.viewStatus.isHidden = false
                 self.viewSliderStatus.isHidden = true
                 self.slider.isHidden = false
+                self.setNeedsStatusBarAppearanceUpdate()
             }
         }
     }
@@ -260,7 +268,9 @@ extension ReaderVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        print("didEndDecelerating tableView")
+        
         var rows = [Int]()
         if let indices = tableView.indexPathsForVisibleRows {
             for cell in indices {
@@ -281,6 +291,54 @@ extension ReaderVC: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        print("didEndDragging tableView")
+        
+        var rows = [Int]()
+        if let indices = tableView.indexPathsForVisibleRows {
+            for cell in indices {
+                let rect = tableView.rectForRow(at: cell)
+                let rectInScreen = tableView.convert(rect, to: self.view)
+                if rectInScreen.minY < tableView.frame.height / 2 {
+                    rows.append(cell.row)
+                }
+            }
+        }
+        
+        if let page = rows.last {
+            setStatusView(page)
+            slider.value = Float(page) + 1
+        } else {
+            setStatusView(0)
+            slider.value = 1
+        }
+    }
+    
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print("didScroll tableView")
+//
+//        var rows = [Int]()
+//        if let indices = tableView.indexPathsForVisibleRows {
+//            for cell in indices {
+//                let rect = tableView.rectForRow(at: cell)
+//                let rectInScreen = tableView.convert(rect, to: self.view)
+//                if rectInScreen.minY < tableView.frame.height / 2 {
+//                    rows.append(cell.row)
+//                }
+//            }
+//        }
+//
+//        if let page = rows.last {
+//            setStatusView(page)
+//            slider.value = Float(page) + 1
+//        } else {
+//            setStatusView(0)
+//            slider.value = 1
+//        }
+//    }
+    
 }
 
 
@@ -289,6 +347,19 @@ extension ReaderVC: ReaderViewControllerDelegate {
     
     func chosenMode() {
         configUI()
+    }
+    
+    
+    func seekToChapter(_ index: Int) {
+        print("choose to \(index)th page")
+        
+        tableView.layoutIfNeeded()
+        DispatchQueue.main.async { [self] in
+            self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
+        }
+        slider.value = Float(index + 1)
+        setStatusView(index)
+        //sliderValueChanged(slider as Any)
     }
     
 }

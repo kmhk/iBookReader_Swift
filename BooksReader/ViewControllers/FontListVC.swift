@@ -26,7 +26,7 @@ class FontListVC: UIViewController, KUIPopOverUsable {
     
     
     var contentSize: CGSize {
-        return CGSize(width: 250, height: 450)
+        return CGSize(width: 250, height: 290)
     }
 
     

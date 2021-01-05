@@ -10,6 +10,8 @@ import KUIPopOver
 
 class SettingVC: UIViewController, KUIPopOverUsable {
     
+    @IBOutlet weak var brightSlider: UISlider!
+    
     @IBOutlet weak var langNote: UILabel!
     @IBOutlet weak var langValue: UILabel!
     @IBOutlet weak var langMark: UIImageView!
@@ -29,7 +31,7 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     
     
     var contentSize: CGSize {
-        return CGSize(width: 250, height: 190)
+        return CGSize(width: 250, height: 230)
     }
     
     
@@ -71,6 +73,9 @@ class SettingVC: UIViewController, KUIPopOverUsable {
         fontValue.text = SettingManager.fontName.rawValue
         fontMark.tintColor = SettingManager.txtColor
         
+        brightSlider.value = Float(UIScreen.main.brightness)
+        brightSlider.minimumTrackTintColor = SettingManager.txtColor
+        
         for btn in btnThemes {
             if btn.tag == SettingManager.theme.rawValue {
                 btn.rounded(borderColor: SettingManager.txtColor, borderWidth: 1.0)
@@ -83,9 +88,14 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     
     // MARK: actions
     
+    @IBAction func brightSliderValueChanged(_ sender: Any) {
+        UIScreen.main.brightness = CGFloat(brightSlider.value)
+    }
+    
+    
     @IBAction func btnFontSmallTapped(_ sender: Any) {
         if SettingManager.fontSize > 12 {
-            SettingManager.fontSize -= 2
+            SettingManager.fontSize -= 1
         }
         
         delegate?.chosenMode()
@@ -94,7 +104,7 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     
     @IBAction func btnFontLargeTapped(_ sender: Any) {
         if SettingManager.fontSize < 36 {
-            SettingManager.fontSize += 2
+            SettingManager.fontSize += 1
         }
         
         delegate?.chosenMode()

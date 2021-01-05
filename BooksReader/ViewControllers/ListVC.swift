@@ -11,6 +11,8 @@ class ListVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    var delegate: ReaderViewControllerDelegate?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +73,13 @@ extension ListVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navBtnBackTapped(self)
+        
+        delegate?.seekToChapter(indexPath.row)
     }
 
 }
