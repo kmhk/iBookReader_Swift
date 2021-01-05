@@ -8,5 +8,6 @@ target 'BooksReader' do
   # Pods for BooksReader
   pod 'KUIPopOver'
   pod 'VerticalSlider'
+  pod 'AnimatedCollectionViewLayout'
 
 end

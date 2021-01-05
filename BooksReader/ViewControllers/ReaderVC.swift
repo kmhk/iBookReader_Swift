@@ -8,6 +8,7 @@
 import UIKit
 import KUIPopOver
 import VerticalSlider
+import AnimatedCollectionViewLayout
 
 
 protocol ReaderViewControllerDelegate {
@@ -18,10 +19,11 @@ protocol ReaderViewControllerDelegate {
 
 class ReaderVC: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var viewStatus: UIView!
     @IBOutlet weak var viewSliderStatus: UILabel!
     @IBOutlet weak var slider: VerticalSlider!
+    @IBOutlet weak var horzSlider: UISlider!
     
     
     override var prefersStatusBarHidden: Bool {
@@ -45,6 +47,9 @@ class ReaderVC: UIViewController {
         
         slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
         slider.minimumValue = 1
+        
+        horzSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        horzSlider.minimumValue = 1
         
         setStatusView(0)
         
@@ -76,14 +81,40 @@ class ReaderVC: UIViewController {
         slider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         slider.minimumTrackTintColor = SettingManager.toolColor
         slider.slider.setThumbImage(createThumbImage(), for: .normal)
-        
         slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        
+        horzSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
+        horzSlider.minimumTrackTintColor = SettingManager.toolColor
+        horzSlider.setThumbImage(createThumbImage(), for: .normal)
+        horzSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
         
         viewSliderStatus.textColor = .white
         
         self.setNeedsStatusBarAppearanceUpdate()
         
-        tableView.reloadData()
+        if SettingManager.scrollMode == .vert {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            collectionView.collectionViewLayout = layout
+            collectionView.isPagingEnabled = false
+            collectionView.showsVerticalScrollIndicator = false
+            
+            slider.isHidden = false
+            horzSlider.isHidden = true
+            
+        } else {
+            let layout = AnimatedCollectionViewLayout()
+            layout.animator = ParallaxAttributesAnimator()
+            layout.scrollDirection = .horizontal
+            collectionView.collectionViewLayout = layout
+            collectionView.isPagingEnabled = true
+            collectionView.showsHorizontalScrollIndicator = false
+            
+            slider.isHidden = true
+            horzSlider.isHidden = false
+        }
+        
+        collectionView.reloadData()
     }
     
     
@@ -127,21 +158,35 @@ class ReaderVC: UIViewController {
 
     
     @IBAction func sliderValueChanged(_ sender: Any) {
-        let page = Int(slider.value)
-        print("value changed slider: page = \(page)")
+//        print("value changed slider: page = \(page)")
+        var page = 0
+        if SettingManager.scrollMode == .vert {
+            page = Int(slider.value)
+            horzSlider.value = Float(page)
+        } else {
+            page = Int(horzSlider.value)
+            slider.value = Float(page)
+        }
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page - 1)
-        tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: false)
         setStatusView(page)
     }
     
     
     @IBAction func sliderDragEnter(_ sender: Any) {
-        let page = Int(slider.value)
-        print("enter to slider drag: page = \(page)")
+//        print("enter to slider drag: page = \(page)")
+        var page = 0
+        if SettingManager.scrollMode == .vert {
+            page = Int(slider.value)
+            horzSlider.value = Float(page)
+        } else {
+            page = Int(horzSlider.value)
+            slider.value = Float(page)
+        }
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
-        tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: false)
         setStatusView(page)
         
         if viewSliderStatus.isHidden == false {
@@ -157,11 +202,18 @@ class ReaderVC: UIViewController {
     
     
     @IBAction func sliderDragExit(_ sender: Any) {
-        let page = Int(slider.value)
-        print("exit from slider drag: page = \(page)")
+        var page = 0
+        if SettingManager.scrollMode == .vert {
+            page = Int(slider.value)
+            horzSlider.value = Float(page)
+        } else {
+            page = Int(horzSlider.value)
+            slider.value = Float(page)
+        }
+//        print("exit from slider drag: page = \(page)")
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
-        tableView.scrollToRow(at: IndexPath(row: page - 1, section: 0), at: .top, animated: false)
+        collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: false)
         setStatusView(page)
         
         if viewSliderStatus.isHidden == true {
@@ -184,13 +236,20 @@ class ReaderVC: UIViewController {
                 self.navigationController?.navigationBar.alpha = 0.0
                 self.viewStatus.alpha = 0
                 self.viewSliderStatus.alpha = 0
-                self.slider.alpha = 0
+                
+                if SettingManager.scrollMode == .vert {
+                    self.slider.alpha = 0
+                }
                 
             } completion: { (finished) in
                 self.navigationController?.navigationBar.isHidden = true
                 self.viewStatus.isHidden = true
                 self.viewSliderStatus.isHidden = true
-                self.slider.isHidden = true
+                
+                if SettingManager.scrollMode == .vert {
+                    self.slider.isHidden = true
+                }
+                
                 self.setNeedsStatusBarAppearanceUpdate()
             }
             
@@ -198,21 +257,32 @@ class ReaderVC: UIViewController {
             navigationController?.navigationBar.alpha = 0.0
             self.viewStatus.alpha = 0
             self.viewSliderStatus.alpha = 0
-            self.slider.alpha = 0
+            
+            if SettingManager.scrollMode == .vert {
+                self.slider.alpha = 0
+            }
+            
             navigationController?.navigationBar.isHidden = false
             
             UIView.animate(withDuration: 0.2) {
                 self.navigationController?.navigationBar.alpha = 1.0
                 self.viewStatus.alpha = 1.0
                 self.viewSliderStatus.alpha = 0.0
-                self.slider.alpha = 1.0
+                
+                if SettingManager.scrollMode == .vert {
+                    self.slider.alpha = 1.0
+                }
                 
             } completion: { (finished) in
                 self.navigationController?.navigationBar.alpha = 1.0
                 self.navigationController?.navigationBar.isHidden = false
                 self.viewStatus.isHidden = false
                 self.viewSliderStatus.isHidden = true
-                self.slider.isHidden = false
+                
+                if SettingManager.scrollMode == .vert {
+                    self.slider.isHidden = false
+                }
+                
                 self.setNeedsStatusBarAppearanceUpdate()
             }
         }
@@ -233,11 +303,11 @@ class ReaderVC: UIViewController {
 }
 
 
-// MARK: - UITableView data source & delegate
-extension ReaderVC: UITableViewDataSource, UITableViewDelegate {
+// MARK: - UICollectionView data source & delegate
+extension ReaderVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func heightOfString(_ indexPath: IndexPath) -> CGFloat {
-        let w = tableView.frame.width // width of title label
+        let w = collectionView.frame.width // width of title label
         let str = ContentManager.shared.attributString(indexPath)
         return str.sizeFittingWidth(w).height
 //        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
@@ -246,98 +316,74 @@ extension ReaderVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
     }
     
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReaderTVCell", for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PageCVCell", for: indexPath) as! PageCVCell
         
         let text = ContentManager.shared.attributString(indexPath)
         
-        cell.textLabel?.attributedText = text
-        cell.textLabel?.numberOfLines = Int(heightOfString(indexPath)) / Int(SettingManager.fontSize)
+        cell.lblText.attributedText = text
+        cell.lblText.numberOfLines = Int(heightOfString(indexPath)) / Int(SettingManager.fontSize)
+        
+        cell.backgroundColor = SettingManager.bkColor
         
         return cell
     }
     
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return heightOfString(indexPath) + 50
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let h = heightOfString(indexPath) + 50
+        return CGSize(width: collectionView.frame.width, height: h)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        print("didEndDecelerating tableView")
+//        print("didEndDecelerating collectionView")
         
-        var rows = [Int]()
-        if let indices = tableView.indexPathsForVisibleRows {
-            for cell in indices {
-                let rect = tableView.rectForRow(at: cell)
-                let rectInScreen = tableView.convert(rect, to: self.view)
-                if rectInScreen.minY < tableView.frame.height / 2 {
-                    rows.append(cell.row)
-                }
-            }
-        }
-        
-        if let page = rows.last {
-            setStatusView(page)
-            slider.value = Float(page) + 1
+        let indices = collectionView.indexPathsForVisibleItems
+        if let page = indices.first {
+            setStatusView(page.row)
+            slider.value = Float(page.row + 1)
+            horzSlider.value = Float(page.row + 1)
         } else {
             setStatusView(0)
             slider.value = 1
+            horzSlider.value = 0
         }
     }
     
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        print("didEndDragging tableView")
+//        print("didEndDragging collectionView")
         
-        var rows = [Int]()
-        if let indices = tableView.indexPathsForVisibleRows {
-            for cell in indices {
-                let rect = tableView.rectForRow(at: cell)
-                let rectInScreen = tableView.convert(rect, to: self.view)
-                if rectInScreen.minY < tableView.frame.height / 2 {
-                    rows.append(cell.row)
-                }
-            }
-        }
-        
-        if let page = rows.last {
-            setStatusView(page)
-            slider.value = Float(page) + 1
+        let indices = collectionView.indexPathsForVisibleItems
+        if let page = indices.first {
+            setStatusView(page.row)
+            slider.value = Float(page.row + 1)
         } else {
             setStatusView(0)
             slider.value = 1
         }
     }
-    
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        print("didScroll tableView")
-//
-//        var rows = [Int]()
-//        if let indices = tableView.indexPathsForVisibleRows {
-//            for cell in indices {
-//                let rect = tableView.rectForRow(at: cell)
-//                let rectInScreen = tableView.convert(rect, to: self.view)
-//                if rectInScreen.minY < tableView.frame.height / 2 {
-//                    rows.append(cell.row)
-//                }
-//            }
-//        }
-//
-//        if let page = rows.last {
-//            setStatusView(page)
-//            slider.value = Float(page) + 1
-//        } else {
-//            setStatusView(0)
-//            slider.value = 1
-//        }
-//    }
     
 }
 
@@ -351,11 +397,11 @@ extension ReaderVC: ReaderViewControllerDelegate {
     
     
     func seekToChapter(_ index: Int) {
-        print("choose to \(index)th page")
+//        print("choose to \(index)th page")
         
-        tableView.layoutIfNeeded()
+        //tableView.layoutIfNeeded()
         DispatchQueue.main.async { [self] in
-            self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: true)
+            self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: true)
         }
         slider.value = Float(index + 1)
         setStatusView(index)

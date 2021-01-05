@@ -23,6 +23,12 @@ enum ReadMode: Int {
 }
 
 
+enum ScrollMode: Int {
+    case vert = 0
+    case horz
+}
+
+
 enum LanguageMode: String, CaseIterable {
     case hebrew = "Hebrew"
     case english = "English"
@@ -51,6 +57,8 @@ class SettingManager {
     static var txtColor = UIColor.black
     
     static var readMode: ReadMode = .normal
+    
+    static var scrollMode: ScrollMode = .vert
     
     static var languageMode: LanguageMode = .english
     

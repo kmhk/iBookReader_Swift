@@ -27,11 +27,14 @@ class SettingVC: UIViewController, KUIPopOverUsable {
     
     @IBOutlet var btnThemes: [UIButton]!
     
+    @IBOutlet weak var scrollNote: UILabel!
+    @IBOutlet weak var scrollSwitch: UISwitch!
+    
     var delegate: ReaderViewControllerDelegate?
     
     
     var contentSize: CGSize {
-        return CGSize(width: 250, height: 230)
+        return CGSize(width: 250, height: 290)
     }
     
     
@@ -75,6 +78,9 @@ class SettingVC: UIViewController, KUIPopOverUsable {
         
         brightSlider.value = Float(UIScreen.main.brightness)
         brightSlider.minimumTrackTintColor = SettingManager.txtColor
+        
+        scrollNote.textColor = SettingManager.txtColor
+        scrollSwitch.isOn = (SettingManager.scrollMode == .vert)
         
         for btn in btnThemes {
             if btn.tag == SettingManager.theme.rawValue {
@@ -132,6 +138,13 @@ class SettingVC: UIViewController, KUIPopOverUsable {
         
         SettingManager.changeTheme(ThemeStyle(rawValue: tag)!)
         configUI()
+        
+        delegate?.chosenMode()
+    }
+    
+    
+    @IBAction func btnScrollModeTapped(_ sender: Any) {
+        SettingManager.scrollMode = (scrollSwitch.isOn == true ? .vert : .horz)
         
         delegate?.chosenMode()
     }
