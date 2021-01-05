@@ -104,7 +104,7 @@ class ReaderVC: UIViewController {
             
         } else {
             let layout = AnimatedCollectionViewLayout()
-            layout.animator = ParallaxAttributesAnimator()
+            layout.animator = PagniationAttributesAnimator()
             layout.scrollDirection = .horizontal
             collectionView.collectionViewLayout = layout
             collectionView.isPagingEnabled = true
