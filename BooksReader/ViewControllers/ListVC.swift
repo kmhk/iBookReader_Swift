@@ -79,7 +79,7 @@ extension ListVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         navBtnBackTapped(self)
         
-        delegate?.seekToChapter(indexPath.row)
+        delegate?.seekToPage(indexPath.row)
     }
 
 }

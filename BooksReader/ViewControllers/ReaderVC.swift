@@ -8,22 +8,28 @@
 import UIKit
 import KUIPopOver
 import VerticalSlider
-import AnimatedCollectionViewLayout
 
 
 protocol ReaderViewControllerDelegate {
     func chosenMode()
-    func seekToChapter(_ index: Int)
+    func seekToPage(_ page: Int)
+    func didScroll(_ page: Int)
+    func didPage(_ page: Int)
 }
 
 
 class ReaderVC: UIViewController {
     
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var viewStatus: UIView!
     @IBOutlet weak var viewSliderStatus: UILabel!
-    @IBOutlet weak var slider: VerticalSlider!
+    @IBOutlet weak var vertSlider: VerticalSlider!
     @IBOutlet weak var horzSlider: UISlider!
+    
+    @IBOutlet weak var scrollModeView: UIView!
+    var scrollModeVC: ScrollModeVC?
+    
+    @IBOutlet weak var pageModeView: UIView!
+    var pageModeVC: PageModeVC?
     
     
     override var prefersStatusBarHidden: Bool {
@@ -45,8 +51,8 @@ class ReaderVC: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         view.addGestureRecognizer(tapGesture)
         
-        slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
-        slider.minimumValue = 1
+        vertSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        vertSlider.minimumValue = 1
         
         horzSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
         horzSlider.minimumValue = 1
@@ -64,12 +70,27 @@ class ReaderVC: UIViewController {
     }
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? PageModeVC {
+            pageModeVC = vc
+            pageModeVC?.readerDelegate = self
+            return
+        } else if let vc = segue.destination as? ScrollModeVC {
+            scrollModeVC = vc
+            scrollModeVC?.readerDelegate = self
+            return
+        }
+    }
+    
+    
     // MARK: config methods
     
     func configUI() {
         navigationController?.navigationBar.barTintColor = SettingManager.bkColor
         navigationController?.navigationBar.tintColor = SettingManager.toolColor
         //navigationController?.navigationBar.isTranslucent = false
+        
+        self.setNeedsStatusBarAppearanceUpdate()
         
         view.backgroundColor = SettingManager.bkColor
         
@@ -78,43 +99,26 @@ class ReaderVC: UIViewController {
             viewStatus.backgroundColor = SettingManager.bkColor
         }
         
-        slider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
-        slider.minimumTrackTintColor = SettingManager.toolColor
-        slider.slider.setThumbImage(createThumbImage(), for: .normal)
-        slider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        vertSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
+        vertSlider.minimumTrackTintColor = SettingManager.toolColor
+        vertSlider.slider.setThumbImage(createThumbImage(), for: .normal)
+        vertSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
         
         horzSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         horzSlider.minimumTrackTintColor = SettingManager.toolColor
         horzSlider.setThumbImage(createThumbImage(), for: .normal)
         horzSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        horzSlider.transform = horzSlider.transform.rotated(by: (SettingManager.languageMode == .hebrew ? CGFloat.pi : 0))
         
         viewSliderStatus.textColor = .white
         
-        self.setNeedsStatusBarAppearanceUpdate()
+        scrollModeView.isHidden = (SettingManager.scrollMode == .horz)
+        vertSlider.isHidden = (SettingManager.scrollMode == .horz)
         
-        if SettingManager.scrollMode == .vert {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .vertical
-            collectionView.collectionViewLayout = layout
-            collectionView.isPagingEnabled = false
-            collectionView.showsVerticalScrollIndicator = false
-            
-            slider.isHidden = false
-            horzSlider.isHidden = true
-            
-        } else {
-            let layout = AnimatedCollectionViewLayout()
-            layout.animator = PagniationAttributesAnimator()
-            layout.scrollDirection = .horizontal
-            collectionView.collectionViewLayout = layout
-            collectionView.isPagingEnabled = true
-            collectionView.showsHorizontalScrollIndicator = false
-            
-            slider.isHidden = true
-            horzSlider.isHidden = false
-        }
+        pageModeView.isHidden = (SettingManager.scrollMode == .vert)
+        horzSlider.isHidden = (SettingManager.scrollMode == .vert)
         
-        collectionView.reloadData()
+        self.pageModeView.frame = (SettingManager.readMode == .normal ? self.view.safeAreaLayoutGuide.layoutFrame : view.bounds)
     }
     
     
@@ -161,16 +165,18 @@ class ReaderVC: UIViewController {
 //        print("value changed slider: page = \(page)")
         var page = 0
         if SettingManager.scrollMode == .vert {
-            page = Int(slider.value)
+            page = Int(vertSlider.value)
             horzSlider.value = Float(page)
         } else {
             page = Int(horzSlider.value)
-            slider.value = Float(page)
+            vertSlider.value = Float(page)
         }
         
+        pageModeVC?.pageTo(page - 1)
+        scrollModeVC?.scrollTo(page - 1)
+        
         viewSliderStatus.text = ContentManager.shared.stringTitle(page - 1)
-        collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: false)
-        setStatusView(page)
+        setStatusView(page - 1)
     }
     
     
@@ -178,16 +184,18 @@ class ReaderVC: UIViewController {
 //        print("enter to slider drag: page = \(page)")
         var page = 0
         if SettingManager.scrollMode == .vert {
-            page = Int(slider.value)
+            page = Int(vertSlider.value)
             horzSlider.value = Float(page)
         } else {
             page = Int(horzSlider.value)
-            slider.value = Float(page)
+            vertSlider.value = Float(page)
         }
         
+        pageModeVC?.pageTo(page - 1)
+        scrollModeVC?.scrollTo(page - 1)
+        
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
-        collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: false)
-        setStatusView(page)
+        setStatusView(page - 1)
         
         if viewSliderStatus.isHidden == false {
             return
@@ -204,17 +212,16 @@ class ReaderVC: UIViewController {
     @IBAction func sliderDragExit(_ sender: Any) {
         var page = 0
         if SettingManager.scrollMode == .vert {
-            page = Int(slider.value)
+            page = Int(vertSlider.value)
             horzSlider.value = Float(page)
         } else {
             page = Int(horzSlider.value)
-            slider.value = Float(page)
+            vertSlider.value = Float(page)
         }
 //        print("exit from slider drag: page = \(page)")
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
-        collectionView.scrollToItem(at: IndexPath(row: page - 1, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: false)
-        setStatusView(page)
+        setStatusView(page - 1)
         
         if viewSliderStatus.isHidden == true {
             return
@@ -236,9 +243,10 @@ class ReaderVC: UIViewController {
                 self.navigationController?.navigationBar.alpha = 0.0
                 self.viewStatus.alpha = 0
                 self.viewSliderStatus.alpha = 0
+                self.pageModeView.frame = self.view.bounds
                 
                 if SettingManager.scrollMode == .vert {
-                    self.slider.alpha = 0
+                    self.vertSlider.alpha = 0
                 }
                 
             } completion: { (finished) in
@@ -247,7 +255,7 @@ class ReaderVC: UIViewController {
                 self.viewSliderStatus.isHidden = true
                 
                 if SettingManager.scrollMode == .vert {
-                    self.slider.isHidden = true
+                    self.vertSlider.isHidden = true
                 }
                 
                 self.setNeedsStatusBarAppearanceUpdate()
@@ -259,7 +267,7 @@ class ReaderVC: UIViewController {
             self.viewSliderStatus.alpha = 0
             
             if SettingManager.scrollMode == .vert {
-                self.slider.alpha = 0
+                self.vertSlider.alpha = 0
             }
             
             navigationController?.navigationBar.isHidden = false
@@ -270,7 +278,7 @@ class ReaderVC: UIViewController {
                 self.viewSliderStatus.alpha = 0.0
                 
                 if SettingManager.scrollMode == .vert {
-                    self.slider.alpha = 1.0
+                    self.vertSlider.alpha = 1.0
                 }
                 
             } completion: { (finished) in
@@ -280,10 +288,12 @@ class ReaderVC: UIViewController {
                 self.viewSliderStatus.isHidden = true
                 
                 if SettingManager.scrollMode == .vert {
-                    self.slider.isHidden = false
+                    self.vertSlider.isHidden = false
                 }
                 
                 self.setNeedsStatusBarAppearanceUpdate()
+                
+                self.pageModeView.frame = self.view.safeAreaLayoutGuide.layoutFrame
             }
         }
     }
@@ -303,109 +313,45 @@ class ReaderVC: UIViewController {
 }
 
 
-// MARK: - UICollectionView data source & delegate
-extension ReaderVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
-    func heightOfString(_ indexPath: IndexPath) -> CGFloat {
-        let w = collectionView.frame.width // width of title label
-        let str = ContentManager.shared.attributString(indexPath)
-        return str.sizeFittingWidth(w).height
-//        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
-//        let rt = str.boundingRect(with: constBox, options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil).integral
-//        return rt.height + 50
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PageCVCell", for: indexPath) as! PageCVCell
-        
-        let text = ContentManager.shared.attributString(indexPath)
-        
-        cell.lblText.attributedText = text
-        cell.lblText.numberOfLines = Int(heightOfString(indexPath)) / Int(SettingManager.fontSize)
-        
-        cell.backgroundColor = SettingManager.bkColor
-        
-        return cell
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let h = heightOfString(indexPath) + 50
-        return CGSize(width: collectionView.frame.width, height: h)
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        print("didEndDecelerating collectionView")
-        
-        let indices = collectionView.indexPathsForVisibleItems
-        if let page = indices.first {
-            setStatusView(page.row)
-            slider.value = Float(page.row + 1)
-            horzSlider.value = Float(page.row + 1)
-        } else {
-            setStatusView(0)
-            slider.value = 1
-            horzSlider.value = 0
-        }
-    }
-    
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        print("didEndDragging collectionView")
-        
-        let indices = collectionView.indexPathsForVisibleItems
-        if let page = indices.first {
-            setStatusView(page.row)
-            slider.value = Float(page.row + 1)
-        } else {
-            setStatusView(0)
-            slider.value = 1
-        }
-    }
-    
-}
-
-
 // MARK: - ReaderViewController delegate
 extension ReaderVC: ReaderViewControllerDelegate {
     
     func chosenMode() {
         configUI()
+        scrollModeVC?.configUI()
+        pageModeVC?.configUI()
     }
     
     
-    func seekToChapter(_ index: Int) {
+    func didScroll(_ page: Int) {
+        vertSlider.value = Float(page + 1)
+        horzSlider.value = Float(page + 1)
+        setStatusView(page)
+        pageModeVC?.pageTo(page)
+    }
+    
+    
+    func didPage(_ page: Int) {
+        vertSlider.value = Float(page + 1)
+        horzSlider.value = Float(page + 1)
+        setStatusView(page)
+        scrollModeVC?.scrollTo(page)
+    }
+    
+    
+    func seekToPage(_ page: Int) {
 //        print("choose to \(index)th page")
+        vertSlider.value = Float(page + 1)
+        horzSlider.value = Float(page + 1)
+        setStatusView(page)
+        scrollModeVC?.scrollTo(page)
+        pageModeVC?.pageTo(page)
         
         //tableView.layoutIfNeeded()
-        DispatchQueue.main.async { [self] in
-            self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: true)
-        }
-        slider.value = Float(index + 1)
-        setStatusView(index)
-        //sliderValueChanged(slider as Any)
+//        DispatchQueue.main.async { [self] in
+//            self.collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: (SettingManager.scrollMode == .vert ? .top : .left), animated: true)
+//        }
+        
     }
     
 }

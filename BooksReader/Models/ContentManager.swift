@@ -55,8 +55,17 @@ class ContentManager {
     }
     
     
-    func attributString(_ indexPath: IndexPath) -> NSAttributedString {
-        let index = (SettingManager.languageMode == .both ? indexPath.row / 2 : indexPath.row)
+    func heightOfString(_ index: Int, w: CGFloat) -> CGFloat {
+        let str = ContentManager.shared.attributContents(index)
+        return str.sizeFittingWidth(w).height
+//        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
+//        let rt = str.boundingRect(with: constBox, options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil).integral
+//        return rt.height + 50
+    }
+    
+    
+    func attributContents(_ indexPath: Int) -> NSAttributedString {
+        let index = (SettingManager.languageMode == .both ? indexPath / 2 : indexPath)
         
         //print("getting \(SettingManager.languageMode.rawValue) text for \(index)th contents")
         
@@ -75,7 +84,7 @@ class ContentManager {
             content = dict["english_content"] ?? ""
             contentParagraph = SettingManager.engParagraphStyle
         } else if SettingManager.languageMode == .both {
-            if indexPath.row % 2 == 0 {
+            if indexPath % 2 == 0 {
                 title = dict["hebrew_chapter"] ?? ""
                 content = dict["hebrew_content"] ?? ""
                 contentParagraph = SettingManager.hebrewParagraphStyle
