@@ -324,6 +324,8 @@ extension ReaderVC: ReaderViewControllerDelegate {
     
     
     func didScroll(_ page: Int) {
+        guard pageModeVC!.curPage != page else { return }
+        
         vertSlider.value = Float(page + 1)
         horzSlider.value = Float(page + 1)
         setStatusView(page)
@@ -332,6 +334,8 @@ extension ReaderVC: ReaderViewControllerDelegate {
     
     
     func didPage(_ page: Int) {
+        guard scrollModeVC!.curPage != page else { return }
+        
         vertSlider.value = Float(page + 1)
         horzSlider.value = Float(page + 1)
         setStatusView(page)
@@ -353,5 +357,5 @@ extension ReaderVC: ReaderViewControllerDelegate {
 //        }
         
     }
-    
+
 }

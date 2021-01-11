@@ -11,6 +11,8 @@ class PageModeVC: UIPageViewController {
     
     var readerDelegate: ReaderViewControllerDelegate?
     
+    var curPage: Int = 0
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +41,8 @@ class PageModeVC: UIPageViewController {
     
     
     func pageTo(_ page: Int) {
+        curPage = page
+        
         let vc = PageVC()
         vc.pageNum = page
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
@@ -65,7 +69,7 @@ class PageModeVC: UIPageViewController {
         vc.pageNum = cur.pageNum - 1
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
         
-        readerDelegate?.didPage(vc.pageNum)
+        curPage = vc.pageNum
         
         return vc
     }
@@ -78,7 +82,7 @@ class PageModeVC: UIPageViewController {
         vc.pageNum = cur.pageNum + 1
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
         
-        readerDelegate?.didPage(vc.pageNum)
+        curPage = vc.pageNum
         
         return vc
     }

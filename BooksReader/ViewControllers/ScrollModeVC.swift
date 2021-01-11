@@ -11,6 +11,9 @@ class ScrollModeVC: UICollectionViewController {
     
     var readerDelegate: ReaderViewControllerDelegate?
     
+    var curPage: Int = 0
+    var isScrolled: Bool = true
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +30,9 @@ class ScrollModeVC: UICollectionViewController {
     
     
     func scrollTo(_ page: Int) {
+        curPage = page
+        isScrolled = false
+        
         collectionView.scrollToItem(at: IndexPath(row: page, section: 0), at: .top, animated: false)
     }
     
@@ -84,33 +90,21 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+  
     
-    
-    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        print("didEndDecelerating collectionView")
-
-        let indices = collectionView.indexPathsForVisibleItems
-        if let page = indices.last {
-            readerDelegate?.didScroll(page.row)
-//            setStatusView(page.row)
-//            slider.value = Float(page.row + 1)
-//            horzSlider.value = Float(page.row + 1)
-        } else {
-            readerDelegate?.didScroll(0)
-//            setStatusView(0)
-//            slider.value = 1
-//            horzSlider.value = 0
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if isScrolled == false {
+            isScrolled = true
+            return
         }
-    }
-
-
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        print("didEndDragging collectionView")
-
+        
         let indices = collectionView.indexPathsForVisibleItems
         if let page = indices.last {
+            curPage = page.row
             readerDelegate?.didScroll(page.row)
         } else {
+            print("*** Logic Error for scrolling...")
+            curPage = 0
             readerDelegate?.didScroll(0)
         }
     }
