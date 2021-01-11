@@ -33,7 +33,11 @@ class ContentManager {
     
     
     func stringTitle(_ indexPath: Int) -> String {
-        let index = (SettingManager.languageMode == .both ? indexPath / 2 : indexPath)
+        var index = (SettingManager.languageMode == .both ? indexPath / 2 : indexPath)
+        
+        if index >= contents.count {
+            index = contents.count - 1
+        }
         
         let dict = ContentManager.shared.contents[index]
         
