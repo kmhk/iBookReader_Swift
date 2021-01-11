@@ -55,9 +55,12 @@ class ContentManager {
     }
     
     
-    func heightOfString(_ index: Int, w: CGFloat) -> CGFloat {
-        let str = ContentManager.shared.attributContents(index)
-        return str.sizeFittingWidth(w).height
+    func heightOfString(_ attributString: NSAttributedString? = nil, index: Int, w: CGFloat) -> CGFloat {
+        var str = attributString
+        if str == nil {
+            str = ContentManager.shared.attributContents(index)
+        }
+        return str!.sizeFittingWidth(w).height
 //        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
 //        let rt = str.boundingRect(with: constBox, options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil).integral
 //        return rt.height + 50

@@ -41,7 +41,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDh-2u-nbQ" customClass="VerticalSlider" customModule="VerticalSlider">
-                                <rect key="frame" x="393" y="88" width="21" height="721"/>
+                                <rect key="frame" x="393" y="120" width="21" height="689"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
@@ -500,11 +500,6 @@
             <point key="canvasLocation" x="-197.10144927536234" y="118.52678571428571"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="RDh-2u-nbQ">
-            <size key="intrinsicContentSize" width="30" height="-1"/>
-        </designable>
-    </designables>
     <resources>
         <image name="a" catalog="system" width="128" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>

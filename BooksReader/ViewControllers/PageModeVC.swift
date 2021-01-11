@@ -22,7 +22,6 @@ class PageModeVC: UIPageViewController {
         let vc = PageVC()
         vc.pageNum = 0
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
-        vc.lines = Int(ContentManager.shared.heightOfString(vc.pageNum, w: view.frame.width)) / Int(SettingManager.fontSize)
         
         setViewControllers([vc], direction: .forward, animated: true, completion: nil)
     }
@@ -43,7 +42,6 @@ class PageModeVC: UIPageViewController {
         let vc = PageVC()
         vc.pageNum = page
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
-        vc.lines = Int(ContentManager.shared.heightOfString(vc.pageNum, w: view.frame.width)) / Int(SettingManager.fontSize)
         
         setViewControllers([vc], direction: .forward, animated: false, completion: nil)
     }
@@ -66,7 +64,6 @@ class PageModeVC: UIPageViewController {
         let vc = PageVC()
         vc.pageNum = cur.pageNum - 1
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
-        vc.lines = Int(ContentManager.shared.heightOfString(vc.pageNum, w: view.frame.width)) / Int(SettingManager.fontSize)
         
         readerDelegate?.didPage(vc.pageNum)
         
@@ -80,7 +77,6 @@ class PageModeVC: UIPageViewController {
         let vc = PageVC()
         vc.pageNum = cur.pageNum + 1
         vc.attrTxt = ContentManager.shared.attributContents(vc.pageNum)
-        vc.lines = Int(ContentManager.shared.heightOfString(vc.pageNum, w: view.frame.width)) / Int(SettingManager.fontSize)
         
         readerDelegate?.didPage(vc.pageNum)
         
