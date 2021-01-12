@@ -31,22 +31,27 @@ extension NSAttributedString {
 //        return rect.integral.size
         
         
-        let ts = NSTextStorage(attributedString: self)
-
-        let size = CGSize(width: w, height: CGFloat.greatestFiniteMagnitude)
-
-        let tc = NSTextContainer(size: size)
-        tc.lineFragmentPadding = 0.0
-
-        let lm = NSLayoutManager()
-        lm.addTextContainer(tc)
-
-        ts.addLayoutManager(lm)
-        lm.glyphRange(forBoundingRect: CGRect(origin: .zero, size: size), in: tc)
-
-        let rect = lm.usedRect(for: tc)
-
-        return rect.integral.size
+        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
+        let rt = self.boundingRect(with: constBox, options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil).integral
+        return rt.size
+        
+        
+//        let ts = NSTextStorage(attributedString: self)
+//
+//        let size = CGSize(width: w, height: CGFloat.greatestFiniteMagnitude)
+//
+//        let tc = NSTextContainer(size: size)
+//        tc.lineFragmentPadding = 0.0
+//
+//        let lm = NSLayoutManager()
+//        lm.addTextContainer(tc)
+//
+//        ts.addLayoutManager(lm)
+//        lm.glyphRange(forBoundingRect: CGRect(origin: .zero, size: size), in: tc)
+//
+//        let rect = lm.usedRect(for: tc)
+//
+//        return rect.integral.size
     }
     
 }

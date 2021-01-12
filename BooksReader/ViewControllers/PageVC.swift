@@ -18,15 +18,17 @@ class PageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scrollView = UIScrollView(frame: CGRect(x: 15, y: 0, width: view.frame.width - 15, height: view.frame.height))
+        let w = view.frame.width - 20
+        
+        scrollView = UIScrollView(frame: CGRect(x: 15, y: 0, width: w, height: view.frame.height))
         scrollView?.autoresizingMask = [.flexibleLeftMargin, .flexibleWidth, .flexibleRightMargin, .flexibleTopMargin, .flexibleHeight, .flexibleBottomMargin]
         scrollView?.showsVerticalScrollIndicator = false
         view.addSubview(scrollView!)
         
-        let h = ContentManager.shared.heightOfString(attrTxt, index: 0, w: scrollView!.frame.width)
-        scrollView?.contentSize = CGSize(width: scrollView!.frame.width, height: h)
+        let h = ContentManager.shared.heightOfString(attrTxt, index: 0, w: w)
+        scrollView?.contentSize = CGSize(width: w, height: h)
         
-        lblText = UILabel(frame: CGRect(x: 0, y: 0, width: scrollView!.frame.width, height: h))
+        lblText = UILabel(frame: CGRect(x: 0, y: 0, width: w, height: h))
         lblText?.autoresizingMask = [.flexibleLeftMargin, .flexibleWidth, .flexibleRightMargin, .flexibleTopMargin, .flexibleHeight, .flexibleBottomMargin]
         scrollView!.addSubview(lblText!)
         
@@ -34,6 +36,11 @@ class PageVC: UIViewController {
         lblText?.numberOfLines = Int(h / SettingManager.fontSize)
         
         view.backgroundColor = SettingManager.bkColor
+        
+//        scrollView?.layer.borderColor = UIColor.blue.cgColor
+//        scrollView?.layer.borderWidth = 1
+//        lblText?.layer.borderColor = UIColor.red.cgColor
+//        lblText?.layer.borderWidth = 1
     }
     
     
@@ -44,8 +51,13 @@ class PageVC: UIViewController {
         attrTxt = ContentManager.shared.attributContents(pageNum)
         lblText?.attributedText = attrTxt
         
-        let lines = Int(ContentManager.shared.heightOfString(attrTxt, index: 0, w: view.frame.width)) / Int(SettingManager.fontSize)
-        lblText?.numberOfLines = lines
+        let w = view.frame.width - 20
+        let h = ContentManager.shared.heightOfString(attrTxt, index: 0, w: w)
+        
+        scrollView?.contentSize = CGSize(width: w, height: h)
+        
+        lblText?.frame = CGRect(x: 0, y: 0, width: w, height: h)
+        lblText?.numberOfLines = Int(h / SettingManager.fontSize)
     }
     
 }

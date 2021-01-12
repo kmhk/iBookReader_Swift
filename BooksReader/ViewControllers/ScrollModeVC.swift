@@ -43,7 +43,7 @@ class ScrollModeVC: UICollectionViewController {
 extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
     
     func heightOfString(_ indexPath: IndexPath) -> CGFloat {
-        let w = collectionView.frame.width // width of title label
+        let w = collectionView.frame.width - 25 // width of title label
         let str = ContentManager.shared.attributContents(indexPath.row)
         return str.sizeFittingWidth(w).height
 //        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
@@ -64,15 +64,22 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
         
         cell.lblText.attributedText = text
         cell.lblText.numberOfLines = Int(heightOfString(indexPath)) / Int(SettingManager.fontSize)
+//        cell.lblText.layer.borderColor = UIColor.blue.cgColor
+//        cell.lblText.layer.borderWidth = 1
         
         cell.backgroundColor = SettingManager.bkColor
+        
+//        print("cell index: \(indexPath.row)\ntext:\n\(text.string)")
+//
+//        cell.layer.borderColor = UIColor.black.cgColor
+//        cell.layer.borderWidth = 1
         
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let h = heightOfString(indexPath) + 50
+        let h = heightOfString(indexPath) + 20
         return CGSize(width: collectionView.frame.width, height: h)
     }
     
