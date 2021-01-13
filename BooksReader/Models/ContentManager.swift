@@ -67,25 +67,24 @@ class ContentManager {
     func attributContents(_ indexPath: Int) -> NSAttributedString {
         let index = indexPath
         
-        //print("getting \(SettingManager.languageMode.rawValue) text for \(index)th contents")
-        
         let dict = ContentManager.shared.contents[index]
         
         var title = ""
         var content = ""
         var contentParagraph = SettingManager.hebrewParagraphStyle
+        var result: NSAttributedString?
         
         if SettingManager.languageMode == .hebrew {
             title = dict["hebrew_chapter"] ?? ""
             content = dict["hebrew_content"] ?? ""
             contentParagraph = SettingManager.hebrewParagraphStyle
-            return getAttributeText(title, contentString: content, paragraph: contentParagraph)
+            result = getAttributeText(title, contentString: content, paragraph: contentParagraph)
             
         } else if SettingManager.languageMode == .english {
             title = dict["english_chapter"] ?? ""
             content = dict["english_content"] ?? ""
             contentParagraph = SettingManager.engParagraphStyle
-            return getAttributeText(title, contentString: content, paragraph: contentParagraph)
+            result = getAttributeText(title, contentString: content, paragraph: contentParagraph)
             
         } else { // if SettingManager.languageMode == .both
             let title1 = dict["hebrew_chapter"] ?? ""
@@ -100,8 +99,18 @@ class ContentManager {
             
             let res = NSMutableAttributedString(attributedString: hebrew)
             res.append(eng)
+            result = res
+        }
+        
+        if index == ContentManager.shared.contents.count - 2 {
+            let lastAttr = attributContents(index + 1)
+            
+            let res = NSMutableAttributedString(attributedString: result!)
+            res.append(lastAttr)
             return res
         }
+        
+        return result!
     }
     
     

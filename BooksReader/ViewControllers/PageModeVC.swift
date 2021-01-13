@@ -76,7 +76,7 @@ class PageModeVC: UIPageViewController {
     
     
     private func getNextPage(_ cur: PageVC) -> PageVC? {
-        guard cur.pageNum < ContentManager.shared.contents.count - 1 else { return nil }
+        guard cur.pageNum < ContentManager.shared.contents.count - 2 else { return nil }
         
         let vc = PageVC()
         vc.pageNum = cur.pageNum + 1

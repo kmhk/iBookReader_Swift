@@ -53,7 +53,7 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ContentManager.shared.contents.count
+        return ContentManager.shared.contents.count - 1
     }
     
     
