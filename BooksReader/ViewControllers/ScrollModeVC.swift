@@ -53,7 +53,7 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
     
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
+        return ContentManager.shared.contents.count
     }
     
     
@@ -124,7 +124,7 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
                     a1 = i
                 }
                 
-                print("showing index: \(indexPath.row), minY: \(scnRect.minY) ----- midY: \(collectionView.frame.midY)")
+//                print("showing index: \(indexPath.row), minY: \(scnRect.minY) ----- midY: \(collectionView.frame.midY)")
             }
             
             let page = indices[a1]

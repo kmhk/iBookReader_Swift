@@ -55,7 +55,7 @@ class ListVC: UIViewController {
 extension ListVC: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
+        return ContentManager.shared.contents.count
     }
     
     

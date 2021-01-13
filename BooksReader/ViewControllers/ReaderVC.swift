@@ -51,10 +51,10 @@ class ReaderVC: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureHandler(_:)))
         view.addGestureRecognizer(tapGesture)
         
-        vertSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        vertSlider.maximumValue = Float(ContentManager.shared.contents.count)
         vertSlider.minimumValue = 1
         
-        horzSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        horzSlider.maximumValue = Float(ContentManager.shared.contents.count)
         horzSlider.minimumValue = 1
         
         setStatusView(0)
@@ -102,13 +102,14 @@ class ReaderVC: UIViewController {
         vertSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         vertSlider.minimumTrackTintColor = SettingManager.toolColor
         vertSlider.slider.setThumbImage(createThumbImage(), for: .normal)
-        vertSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
+        vertSlider.maximumValue = Float(ContentManager.shared.contents.count)
         
         horzSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         horzSlider.minimumTrackTintColor = SettingManager.toolColor
         horzSlider.setThumbImage(createThumbImage(), for: .normal)
-        horzSlider.maximumValue = Float(ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1))
-        horzSlider.transform = horzSlider.transform.rotated(by: (SettingManager.languageMode == .hebrew ? CGFloat.pi : 0))
+        horzSlider.maximumValue = Float(ContentManager.shared.contents.count)
+        //horzSlider.transform = horzSlider.transform.rotated(by: (SettingManager.languageMode == .hebrew ? CGFloat.pi : 0))
+        horzSlider.transform = (SettingManager.languageMode == .english ? CGAffineTransform.identity : CGAffineTransform.identity.rotated(by: CGFloat.pi))
         
         viewSliderStatus.textColor = .white
         
@@ -300,7 +301,7 @@ class ReaderVC: UIViewController {
     
     
     func setStatusView(_ page: Int) {
-        let max = ContentManager.shared.contents.count * (SettingManager.languageMode == .both ? 2 : 1)
+        let max = ContentManager.shared.contents.count 
         let pageNum = page + 1
         
         if let v = viewStatus.viewWithTag(100) as? UILabel {

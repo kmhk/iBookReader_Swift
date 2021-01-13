@@ -96,14 +96,14 @@ extension PageModeVC: UIPageViewControllerDataSource, UIPageViewControllerDelega
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let cur = viewController as? PageVC else { return nil }
         
-        if SettingManager.languageMode == .hebrew {
+        if SettingManager.languageMode != .english {
             guard let vc = getNextPage(cur) else { return nil }
-            readerDelegate?.didPage(vc.pageNum)
+//            readerDelegate?.didPage(vc.pageNum)
             return vc
             
         } else {
             guard let vc = getPrevPage(cur) else { return nil }
-            readerDelegate?.didPage(vc.pageNum)
+//            readerDelegate?.didPage(vc.pageNum)
             return vc
         }
     }
@@ -112,15 +112,23 @@ extension PageModeVC: UIPageViewControllerDataSource, UIPageViewControllerDelega
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let cur = viewController as? PageVC else { return nil }
         
-        if SettingManager.languageMode == .hebrew {
+        if SettingManager.languageMode != .english {
             guard let vc = getPrevPage(cur) else { return nil }
-            readerDelegate?.didPage(vc.pageNum)
+//            readerDelegate?.didPage(vc.pageNum)
             return vc
             
         } else {
             guard let vc = getNextPage(cur) else { return nil }
-            readerDelegate?.didPage(vc.pageNum)
+//            readerDelegate?.didPage(vc.pageNum)
             return vc
+        }
+    }
+    
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard completed == true else { return }
+        if let curPage = pageViewController.viewControllers?.first as? PageVC {
+            readerDelegate?.didPage(curPage.pageNum)
         }
     }
     

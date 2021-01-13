@@ -33,7 +33,7 @@ class ContentManager {
     
     
     func stringTitle(_ indexPath: Int) -> String {
-        var index = (SettingManager.languageMode == .both ? indexPath / 2 : indexPath)
+        var index = indexPath
         
         if index >= contents.count {
             index = contents.count - 1
@@ -48,11 +48,7 @@ class ContentManager {
         } else if SettingManager.languageMode == .english {
             title = dict["english_chapter"] ?? ""
         } else if SettingManager.languageMode == .both {
-            if indexPath % 2 == 0 {
-                title = dict["hebrew_chapter"] ?? ""
-            } else {
-                title = dict["english_chapter"] ?? ""
-            }
+            title = (dict["hebrew_chapter"] ?? "") + " " + (dict["english_chapter"] ?? "")
         }
         
         return title
@@ -65,14 +61,11 @@ class ContentManager {
             str = ContentManager.shared.attributContents(index)
         }
         return str!.sizeFittingWidth(w).height
-//        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
-//        let rt = str.boundingRect(with: constBox, options: [.usesFontLeading, .usesLineFragmentOrigin], context: nil).integral
-//        return rt.height + 50
     }
     
     
     func attributContents(_ indexPath: Int) -> NSAttributedString {
-        let index = (SettingManager.languageMode == .both ? indexPath / 2 : indexPath)
+        let index = indexPath
         
         //print("getting \(SettingManager.languageMode.rawValue) text for \(index)th contents")
         
@@ -86,22 +79,34 @@ class ContentManager {
             title = dict["hebrew_chapter"] ?? ""
             content = dict["hebrew_content"] ?? ""
             contentParagraph = SettingManager.hebrewParagraphStyle
+            return getAttributeText(title, contentString: content, paragraph: contentParagraph)
+            
         } else if SettingManager.languageMode == .english {
             title = dict["english_chapter"] ?? ""
             content = dict["english_content"] ?? ""
             contentParagraph = SettingManager.engParagraphStyle
-        } else if SettingManager.languageMode == .both {
-            if indexPath % 2 == 0 {
-                title = dict["hebrew_chapter"] ?? ""
-                content = dict["hebrew_content"] ?? ""
-                contentParagraph = SettingManager.hebrewParagraphStyle
-            } else {
-                title = dict["english_chapter"] ?? ""
-                content = dict["english_content"] ?? ""
-                contentParagraph = SettingManager.engParagraphStyle
-            }
+            return getAttributeText(title, contentString: content, paragraph: contentParagraph)
+            
+        } else { // if SettingManager.languageMode == .both
+            let title1 = dict["hebrew_chapter"] ?? ""
+            let content1 = dict["hebrew_content"] ?? ""
+            let contentParagraph1 = SettingManager.hebrewParagraphStyle
+            let hebrew = getAttributeText(title1, contentString: content1, paragraph: contentParagraph1)
+            
+            let title2 = dict["english_chapter"] ?? ""
+            let content2 = dict["english_content"] ?? ""
+            let contentParagraph2 = SettingManager.engParagraphStyle
+            let eng = getAttributeText(title2, contentString: content2, paragraph: contentParagraph2)
+            
+            let res = NSMutableAttributedString(attributedString: hebrew)
+            res.append(eng)
+            return res
         }
-        
+    }
+    
+    
+    private func getAttributeText(_ title: String, contentString: String, paragraph: NSParagraphStyle) -> NSAttributedString {
+        var content = contentString
         if content.contains("א") {
             let filteringText = "׃" // filtering text
             content = content.replacingOccurrences(of: filteringText, with: ":\n\n", options: [.regularExpression, .caseInsensitive])
@@ -115,10 +120,10 @@ class ContentManager {
                                     attributes: [NSAttributedString.Key.font: UIFont(name: SettingManager.fontName.rawValue, size: SettingManager.fontSize * 1.5)!,
                                              NSAttributedString.Key.foregroundColor: SettingManager.txtColor,
                                              NSAttributedString.Key.paragraphStyle: SettingManager.titleParagraphStyle])
-        let a2 = NSAttributedString(string: content + "",
+        let a2 = NSAttributedString(string: content + "\n",
                                 attributes: [NSAttributedString.Key.font: UIFont(name: SettingManager.fontName.rawValue, size: SettingManager.fontSize)!,
                                              NSAttributedString.Key.foregroundColor: SettingManager.txtColor,
-                                             NSAttributedString.Key.paragraphStyle:contentParagraph])
+                                             NSAttributedString.Key.paragraphStyle:paragraph])
         
         let result = NSMutableAttributedString(attributedString: a1)
         result.append(a2)
