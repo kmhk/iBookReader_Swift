@@ -43,7 +43,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDh-2u-nbQ" customClass="VerticalSlider" customModule="VerticalSlider">
-                                <rect key="frame" x="393" y="108" width="21" height="689"/>
+                                <rect key="frame" x="386" y="108" width="21" height="689"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
@@ -62,7 +62,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="un8-S2-IUX">
-                                        <rect key="frame" x="152" y="14" width="110" height="25"/>
+                                        <rect key="frame" x="152" y="19" width="110" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                         <nil key="textColor"/>
@@ -74,7 +74,7 @@
                                         <color key="backgroundColor" red="0.84575896258762562" green="0.84575896258762562" blue="0.84575896258762562" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </view>
                                     <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="0Nc-aw-wmZ">
-                                        <rect key="frame" x="25" y="-5" width="365" height="30"/>
+                                        <rect key="frame" x="25" y="-3" width="365" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="sliderDragEnter:" destination="BYZ-38-t0r" eventType="touchDown" id="RFl-Xa-WyV"/>
@@ -127,7 +127,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rG4-Be-ttc">
-                                            <rect key="frame" x="10" y="0.0" width="103" height="128"/>
+                                            <rect key="frame" x="10" y="0.0" width="88" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -149,7 +149,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GKH-b8-L8n" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628.985507246377" y="-403.125"/>
+            <point key="canvasLocation" x="1628.985507246377" y="-403.45982142857139"/>
         </scene>
         <!--Page ModeVC-->
         <scene sceneID="Zu3-qo-DeB">

@@ -43,7 +43,7 @@ class ScrollModeVC: UICollectionViewController {
 extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
     
     func heightOfString(_ indexPath: IndexPath) -> CGFloat {
-        let w = collectionView.frame.width - 35 // width of title label
+        let w = collectionView.frame.width - 45 // width of title label
         let str = ContentManager.shared.attributContents(indexPath.row)
         return str.sizeFittingWidth(w).height
 //        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
