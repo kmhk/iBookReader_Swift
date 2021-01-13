@@ -119,7 +119,20 @@ class ReaderVC: UIViewController {
         pageModeView.isHidden = (SettingManager.scrollMode == .vert)
         horzSlider.isHidden = (SettingManager.scrollMode == .vert)
         
-        self.pageModeView.frame = (SettingManager.readMode == .normal ? self.view.safeAreaLayoutGuide.layoutFrame : view.bounds)
+        self.pageModeView.frame = (SettingManager.readMode == .normal ?
+                                    CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
+                                    y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
+                                    width: self.view.safeAreaLayoutGuide.layoutFrame.width,
+                                    height: view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - viewStatus.frame.height)
+                                    :
+                                    view.bounds)
+        self.scrollModeView.frame = (SettingManager.readMode == .normal ?
+                                        CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
+                                        y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
+                                        width: self.view.safeAreaLayoutGuide.layoutFrame.width,
+                                        height: view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - viewStatus.frame.height)
+                                        :
+                                        view.bounds)
     }
     
     
@@ -158,7 +171,8 @@ class ReaderVC: UIViewController {
     
     
     @objc func tapGestureHandler(_ sender: Any) {
-        changeReadMode()
+//        changeReadMode()
+        changeScreenMode()
     }
 
     
@@ -238,43 +252,44 @@ class ReaderVC: UIViewController {
     
     // MARK: methods
     
-    func changeReadMode() {
+    func changeScreenMode() {
         if SettingManager.changeReadMode() == .fullscreen {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            
             UIView.animate(withDuration: 0.2) {
-                self.navigationController?.navigationBar.alpha = 0.0
                 self.viewStatus.alpha = 0
                 self.viewSliderStatus.alpha = 0
+                
                 self.pageModeView.frame = self.view.bounds
+                self.scrollModeView.frame = self.view.bounds
                 
                 if SettingManager.scrollMode == .vert {
                     self.vertSlider.alpha = 0
                 }
-                
-            } completion: { (finished) in
-                self.navigationController?.navigationBar.isHidden = true
+            } completion: { (flat) in
                 self.viewStatus.isHidden = true
                 self.viewSliderStatus.isHidden = true
                 
                 if SettingManager.scrollMode == .vert {
                     self.vertSlider.isHidden = true
                 }
-                
-                self.setNeedsStatusBarAppearanceUpdate()
             }
             
         } else {
-            navigationController?.navigationBar.alpha = 0.0
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            
+            self.viewStatus.isHidden = false
             self.viewStatus.alpha = 0
+            
+            self.viewSliderStatus.isHidden = false
             self.viewSliderStatus.alpha = 0
             
             if SettingManager.scrollMode == .vert {
+                self.vertSlider.isHidden = false
                 self.vertSlider.alpha = 0
             }
             
-            navigationController?.navigationBar.isHidden = false
-            
             UIView.animate(withDuration: 0.2) {
-                self.navigationController?.navigationBar.alpha = 1.0
                 self.viewStatus.alpha = 1.0
                 self.viewSliderStatus.alpha = 0.0
                 
@@ -282,19 +297,17 @@ class ReaderVC: UIViewController {
                     self.vertSlider.alpha = 1.0
                 }
                 
-            } completion: { (finished) in
-                self.navigationController?.navigationBar.alpha = 1.0
-                self.navigationController?.navigationBar.isHidden = false
-                self.viewStatus.isHidden = false
-                self.viewSliderStatus.isHidden = true
+                self.pageModeView.frame = CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
+                                                 y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
+                                                 width: self.view.safeAreaLayoutGuide.layoutFrame.width,
+                                                 height: self.view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - self.viewStatus.frame.height)
+                self.scrollModeView.frame = CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
+                                                 y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
+                                                 width: self.view.safeAreaLayoutGuide.layoutFrame.width,
+                                                 height: self.view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - self.viewStatus.frame.height)
                 
-                if SettingManager.scrollMode == .vert {
-                    self.vertSlider.isHidden = false
-                }
+            } completion: { (flag) in
                 
-                self.setNeedsStatusBarAppearanceUpdate()
-                
-                self.pageModeView.frame = self.view.safeAreaLayoutGuide.layoutFrame
             }
         }
     }
