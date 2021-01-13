@@ -43,7 +43,7 @@ class ScrollModeVC: UICollectionViewController {
 extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
     
     func heightOfString(_ indexPath: IndexPath) -> CGFloat {
-        let w = collectionView.frame.width - 25 // width of title label
+        let w = collectionView.frame.width - 35 // width of title label
         let str = ContentManager.shared.attributContents(indexPath.row)
         return str.sizeFittingWidth(w).height
 //        let constBox = CGSize(width: w, height: .greatestFiniteMagnitude)
@@ -106,9 +106,31 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
         }
         
         let indices = collectionView.indexPathsForVisibleItems
-        if let page = indices.last {
+        if indices.count == 1 {
+            let page = indices[0]
             curPage = page.row
             readerDelegate?.didScroll(page.row)
+            
+        } else if indices.count > 1 {
+            var a1: Int = 0
+            var y1: CGFloat = 0
+            for i in 0..<indices.count {
+                let indexPath = indices[i]
+                let orgRect = collectionView.layoutAttributesForItem(at: indexPath)!.frame
+                let scnRect = collectionView.convert(orgRect, to: collectionView.superview)
+                
+                if scnRect.minY < collectionView.frame.midY && (y1 < scnRect.minY || y1 == 0) {
+                    y1 = scnRect.minY
+                    a1 = i
+                }
+                
+                print("showing index: \(indexPath.row), minY: \(scnRect.minY) ----- midY: \(collectionView.frame.midY)")
+            }
+            
+            let page = indices[a1]
+            curPage = page.row
+            readerDelegate?.didScroll(page.row)
+            
         } else {
             print("*** Logic Error for scrolling...")
             curPage = 0

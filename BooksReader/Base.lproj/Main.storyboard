@@ -500,6 +500,11 @@
             <point key="canvasLocation" x="-197.10144927536234" y="118.52678571428571"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="RDh-2u-nbQ">
+            <size key="intrinsicContentSize" width="30" height="-1"/>
+        </designable>
+    </designables>
     <resources>
         <image name="a" catalog="system" width="128" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
