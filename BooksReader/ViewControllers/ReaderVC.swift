@@ -193,7 +193,6 @@ class ReaderVC: UIViewController {
 
     
     @IBAction func sliderValueChanged(_ sender: Any) {
-//        print("value changed slider: page = \(page)")
         var page = 0
         if SettingManager.scrollMode == .vert {
             page = Int(vertSlider.value)
@@ -203,16 +202,28 @@ class ReaderVC: UIViewController {
             vertSlider.value = Float(page)
         }
         
-        pageModeVC?.pageTo(page - 1)
-        scrollModeVC?.scrollTo(page - 1)
+        print("value changed slider: page = \(page)")
+        
+//        pageModeVC?.pageTo(page - 1)
+//        scrollModeVC?.scrollTo(page - 1)
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page - 1)
-        setStatusView(page - 1)
+//        setStatusView(page - 1)
+        
+        if viewSliderStatus.isHidden == false {
+            self.viewSliderStatus.alpha = 1.0
+            return
+        }
+        
+        viewSliderStatus.isHidden = false
+        viewSliderStatus.alpha = 0.0
+        UIView.animate(withDuration: 0.1) {
+            self.viewSliderStatus.alpha = 1.0
+        }
     }
     
     
     @IBAction func sliderDragEnter(_ sender: Any) {
-//        print("enter to slider drag: page = \(page)")
         var page = 0
         if SettingManager.scrollMode == .vert {
             page = Int(vertSlider.value)
@@ -222,11 +233,13 @@ class ReaderVC: UIViewController {
             vertSlider.value = Float(page)
         }
         
-        pageModeVC?.pageTo(page - 1)
-        scrollModeVC?.scrollTo(page - 1)
+//        print("enter to slider drag: page = \(page)")
+        
+//        pageModeVC?.pageTo(page - 1)
+//        scrollModeVC?.scrollTo(page - 1)
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
-        setStatusView(page - 1)
+//        setStatusView(page - 1)
         
         if viewSliderStatus.isHidden == false {
             return
@@ -250,6 +263,9 @@ class ReaderVC: UIViewController {
             vertSlider.value = Float(page)
         }
 //        print("exit from slider drag: page = \(page)")
+        
+        pageModeVC?.pageTo(page - 1)
+        scrollModeVC?.scrollTo(page - 1)
         
         viewSliderStatus.text = ContentManager.shared.stringTitle(page)
         setStatusView(page - 1)

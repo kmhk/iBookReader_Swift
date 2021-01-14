@@ -131,11 +131,11 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
             curPage = page.row
             readerDelegate?.didScroll(page.row)
             
-        } else {
+        }/* else {
             print("*** Logic Error for scrolling...")
             curPage = 0
             readerDelegate?.didScroll(0)
-        }
+        }*/
     }
     
 }
