@@ -102,15 +102,15 @@ class ReaderVC: UIViewController {
         vertSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         vertSlider.minimumTrackTintColor = SettingManager.toolColor
         vertSlider.slider.setThumbImage(createThumbImage(), for: .normal)
-        vertSlider.slider.setMinimumTrackImage(createTrackImage(), for: .normal)
-        vertSlider.slider.setMaximumTrackImage(createTrackImage(), for: .normal)
+        vertSlider.slider.setMinimumTrackImage(createTrackImage(SettingManager.toolColor), for: .normal)
+        vertSlider.slider.setMaximumTrackImage(createTrackImage(UIColor.lightGray), for: .normal)
         vertSlider.maximumValue = Float(ContentManager.shared.contents.count - 1)
         
         horzSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         horzSlider.minimumTrackTintColor = SettingManager.toolColor
         horzSlider.setThumbImage(createThumbImage(), for: .normal)
-        horzSlider.setMinimumTrackImage(createTrackImage(), for: .normal)
-        horzSlider.setMaximumTrackImage(createTrackImage(), for: .normal)
+        horzSlider.setMinimumTrackImage(createTrackImage(SettingManager.toolColor), for: .normal)
+        horzSlider.setMaximumTrackImage(createTrackImage(UIColor.lightGray), for: .normal)
         horzSlider.maximumValue = Float(ContentManager.shared.contents.count - 1)
         //horzSlider.transform = horzSlider.transform.rotated(by: (SettingManager.languageMode == .hebrew ? CGFloat.pi : 0))
         horzSlider.transform = (SettingManager.languageMode == .english ? CGAffineTransform.identity : CGAffineTransform.identity.rotated(by: CGFloat.pi))
@@ -152,10 +152,10 @@ class ReaderVC: UIViewController {
     }
     
     
-    func createTrackImage() -> UIImage {
+    func createTrackImage(_ color: UIColor) -> UIImage {
         UIGraphicsBeginImageContext(CGSize(width: 2, height: 2))
         let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor(UIColor.lightGray.cgColor)
+        context?.setFillColor(color.cgColor)
         context?.fillEllipse(in: CGRect(x: 0, y: 0, width: 2, height: 2))
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
