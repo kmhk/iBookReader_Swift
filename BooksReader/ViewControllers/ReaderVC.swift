@@ -102,11 +102,15 @@ class ReaderVC: UIViewController {
         vertSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         vertSlider.minimumTrackTintColor = SettingManager.toolColor
         vertSlider.slider.setThumbImage(createThumbImage(), for: .normal)
+        vertSlider.slider.setMinimumTrackImage(createTrackImage(), for: .normal)
+        vertSlider.slider.setMaximumTrackImage(createTrackImage(), for: .normal)
         vertSlider.maximumValue = Float(ContentManager.shared.contents.count - 1)
         
         horzSlider.maximumTrackTintColor = UIColor(hex: "#A8A8A8FF")
         horzSlider.minimumTrackTintColor = SettingManager.toolColor
         horzSlider.setThumbImage(createThumbImage(), for: .normal)
+        horzSlider.setMinimumTrackImage(createTrackImage(), for: .normal)
+        horzSlider.setMaximumTrackImage(createTrackImage(), for: .normal)
         horzSlider.maximumValue = Float(ContentManager.shared.contents.count - 1)
         //horzSlider.transform = horzSlider.transform.rotated(by: (SettingManager.languageMode == .hebrew ? CGFloat.pi : 0))
         horzSlider.transform = (SettingManager.languageMode == .english ? CGAffineTransform.identity : CGAffineTransform.identity.rotated(by: CGFloat.pi))
@@ -141,6 +145,18 @@ class ReaderVC: UIViewController {
         let context = UIGraphicsGetCurrentContext()
         context?.setFillColor(SettingManager.toolColor.cgColor)
         context?.fillEllipse(in: CGRect(x: 0, y: 0, width: 8, height: 8))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
+    
+    
+    func createTrackImage() -> UIImage {
+        UIGraphicsBeginImageContext(CGSize(width: 2, height: 2))
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(UIColor.lightGray.cgColor)
+        context?.fillEllipse(in: CGRect(x: 0, y: 0, width: 2, height: 2))
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -255,6 +271,7 @@ class ReaderVC: UIViewController {
     func changeScreenMode() {
         if SettingManager.changeReadMode() == .fullscreen {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
+            self.setNeedsStatusBarAppearanceUpdate()
             
             UIView.animate(withDuration: 0.2) {
                 self.viewStatus.alpha = 0
@@ -277,6 +294,7 @@ class ReaderVC: UIViewController {
             
         } else {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.setNeedsStatusBarAppearanceUpdate()
             
             self.viewStatus.isHidden = false
             self.viewStatus.alpha = 0
