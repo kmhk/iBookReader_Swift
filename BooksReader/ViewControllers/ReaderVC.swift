@@ -202,7 +202,7 @@ class ReaderVC: UIViewController {
             vertSlider.value = Float(page)
         }
         
-        print("value changed slider: page = \(page)")
+//        print("value changed slider: page = \(page)")
         
 //        pageModeVC?.pageTo(page - 1)
 //        scrollModeVC?.scrollTo(page - 1)

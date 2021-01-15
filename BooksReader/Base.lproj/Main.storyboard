@@ -52,8 +52,8 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="sliderDragEnter:" destination="BYZ-38-t0r" eventType="touchDown" id="VPg-l1-075"/>
-                                    <action selector="sliderDragEnter:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="vCg-Bf-0Ig"/>
                                     <action selector="sliderDragExit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dlS-Ld-fyX"/>
+                                    <action selector="sliderDragExit:" destination="BYZ-38-t0r" eventType="touchUpOutside" id="grI-NW-HtT"/>
                                     <action selector="sliderValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="1VN-cX-JNZ"/>
                                 </connections>
                             </view>
