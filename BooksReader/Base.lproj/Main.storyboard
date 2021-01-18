@@ -23,7 +23,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
-                                    <segue destination="Vjd-DV-Bs6" kind="embed" identifier="segueScroll" id="U5V-KV-VWV"/>
+                                    <segue destination="gcL-0p-ZSC" kind="embed" id="3zG-83-MA9"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bdH-O3-dgd">
@@ -157,7 +157,47 @@
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="none" id="mAR-EV-wQx" customClass="PageModeVC" customModule="BooksReader" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eE0-NA-4Ba" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2764" y="104"/>
+            <point key="canvasLocation" x="2365" y="-230"/>
+        </scene>
+        <!--Table ModeVC-->
+        <scene sceneID="IGD-sn-C90">
+            <objects>
+                <tableViewController storyboardIdentifier="TableModeVC" id="gcL-0p-ZSC" customClass="TableModeVC" customModule="BooksReader" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="2Zw-HO-4Ga">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageTVCell" rowHeight="108" id="BhC-rP-kRK" customClass="PageTVCell" customModule="BooksReader" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="108"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BhC-rP-kRK" id="56z-bg-oP4">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xRm-S0-cpK">
+                                            <rect key="frame" x="10" y="0.0" width="369" height="128"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="lblTxt" destination="xRm-S0-cpK" id="utZ-bS-nOg"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="gcL-0p-ZSC" id="bpa-DD-vQc"/>
+                            <outlet property="delegate" destination="gcL-0p-ZSC" id="SRL-DA-eYs"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KgU-BW-p6j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3082.608695652174" y="118.52678571428571"/>
         </scene>
         <!--SettingVC-->
         <scene sceneID="Ci3-L5-FKP">
@@ -502,11 +542,6 @@
             <point key="canvasLocation" x="-197.10144927536234" y="118.52678571428571"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="RDh-2u-nbQ">
-            <size key="intrinsicContentSize" width="30" height="-1"/>
-        </designable>
-    </designables>
     <resources>
         <image name="a" catalog="system" width="128" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>

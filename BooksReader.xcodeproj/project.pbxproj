@@ -28,6 +28,8 @@
 		F3D6E1F2259C8B240030CABB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F3D6E1F1259C8B240030CABB /* Assets.xcassets */; };
 		F3D6E1F5259C8B240030CABB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3D6E1F3259C8B240030CABB /* LaunchScreen.storyboard */; };
 		F3D6E200259C8B8C0030CABB /* tehillim.json in Resources */ = {isa = PBXBuildFile; fileRef = F3D6E1FF259C8B8C0030CABB /* tehillim.json */; };
+		F3F88A9D25B547D900A0A442 /* PageTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F88A9C25B547D900A0A442 /* PageTVCell.swift */; };
+		F3F88AA025B5482700A0A442 /* TableModeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F88A9F25B5482700A0A442 /* TableModeVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +58,8 @@
 		F3D6E1F4259C8B240030CABB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F3D6E1F6259C8B240030CABB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3D6E1FF259C8B8C0030CABB /* tehillim.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tehillim.json; sourceTree = "<group>"; };
+		F3F88A9C25B547D900A0A442 /* PageTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTVCell.swift; sourceTree = "<group>"; };
+		F3F88A9F25B5482700A0A442 /* TableModeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableModeVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +99,7 @@
 				F39D200925A57B5B00EC8D63 /* PageModeVC.swift */,
 				F39D200525A56C9C00EC8D63 /* PageVC.swift */,
 				F39D200D25A57BCF00EC8D63 /* ScrollModeVC.swift */,
+				F3F88A9F25B5482700A0A442 /* TableModeVC.swift */,
 				F30E1FB7259C94AB0080A338 /* ReaderVC.swift */,
 				F30E1FCB259CB14B0080A338 /* SettingVC.swift */,
 				F30E1FCE259CB2500080A338 /* FontListVC.swift */,
@@ -106,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				F30E1FE625A40B1F0080A338 /* PageCVCell.swift */,
+				F3F88A9C25B547D900A0A442 /* PageTVCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -296,6 +302,8 @@
 				F39D200A25A57B5B00EC8D63 /* PageModeVC.swift in Sources */,
 				F30E1FBC259C9AA60080A338 /* ListVC.swift in Sources */,
 				F30E1FB8259C94AB0080A338 /* ReaderVC.swift in Sources */,
+				F3F88AA025B5482700A0A442 /* TableModeVC.swift in Sources */,
+				F3F88A9D25B547D900A0A442 /* PageTVCell.swift in Sources */,
 				F30E1FE0259DEEBD0080A338 /* NSAttributedString.swift in Sources */,
 				F39D200E25A57BCF00EC8D63 /* ScrollModeVC.swift in Sources */,
 				F3D6E1E9259C8B210030CABB /* AppDelegate.swift in Sources */,
