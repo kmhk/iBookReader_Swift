@@ -130,13 +130,13 @@ class ReaderVC: UIViewController {
                                     height: view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - viewStatus.frame.height)
                                     :
                                     view.bounds)
-        self.scrollModeView.frame = (SettingManager.readMode == .normal ?
-                                        CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
-                                        y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
-                                        width: self.view.safeAreaLayoutGuide.layoutFrame.width,
-                                        height: view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - viewStatus.frame.height)
-                                        :
-                                        view.bounds)
+//        self.scrollModeView.frame = (SettingManager.readMode == .normal ?
+//                                        CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
+//                                        y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
+//                                        width: self.view.safeAreaLayoutGuide.layoutFrame.width,
+//                                        height: view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - viewStatus.frame.height)
+//                                        :
+//                                        view.bounds)
     }
     
     
@@ -294,7 +294,7 @@ class ReaderVC: UIViewController {
                 self.viewSliderStatus.alpha = 0
                 
                 self.pageModeView.frame = self.view.bounds
-                self.scrollModeView.frame = self.view.bounds
+                //self.scrollModeView.frame = self.view.bounds
                 
                 if SettingManager.scrollMode == .vert {
                     self.vertSlider.alpha = 0
@@ -335,10 +335,10 @@ class ReaderVC: UIViewController {
                                                  y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
                                                  width: self.view.safeAreaLayoutGuide.layoutFrame.width,
                                                  height: self.view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - self.viewStatus.frame.height)
-                self.scrollModeView.frame = CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
-                                                 y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
-                                                 width: self.view.safeAreaLayoutGuide.layoutFrame.width,
-                                                 height: self.view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - self.viewStatus.frame.height)
+//                self.scrollModeView.frame = CGRect(x: self.view.safeAreaLayoutGuide.layoutFrame.minX,
+//                                                 y: self.view.safeAreaLayoutGuide.layoutFrame.minY,
+//                                                 width: self.view.safeAreaLayoutGuide.layoutFrame.width,
+//                                                 height: self.view.bounds.height - self.view.safeAreaLayoutGuide.layoutFrame.minY - self.viewStatus.frame.height)
                 
             } completion: { (flag) in
                 
