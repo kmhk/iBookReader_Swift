@@ -34,7 +34,7 @@ class TableModeVC: UITableViewController {
         curPage = page
 //        isScrolled = false
         
-        tableView.scrollToRow(at: IndexPath(row: page + 2, section: 0), at: .top, animated: false)
+        tableView.scrollToRow(at: IndexPath(row: page, section: 0), at: .top, animated: false)
     }
     
 
