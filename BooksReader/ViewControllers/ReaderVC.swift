@@ -141,7 +141,7 @@ class ReaderVC: UIViewController {
     
     
     func createThumbImage() -> UIImage {
-        UIGraphicsBeginImageContext(CGSize(width: 8, height: 8))
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 8, height: 8), false, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()
         context?.setFillColor(SettingManager.toolColor.cgColor)
         context?.fillEllipse(in: CGRect(x: 0, y: 0, width: 8, height: 8))
@@ -153,7 +153,7 @@ class ReaderVC: UIViewController {
     
     
     func createTrackImage(_ color: UIColor) -> UIImage {
-        UIGraphicsBeginImageContext(CGSize(width: 2, height: 2))
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 2, height: 2), false, UIScreen.main.scale)
         let context = UIGraphicsGetCurrentContext()
         context?.setFillColor(color.cgColor)
         context?.fillEllipse(in: CGRect(x: 0, y: 0, width: 2, height: 2))
