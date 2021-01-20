@@ -18,7 +18,7 @@ class PageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let w = view.frame.width - 20
+        let w = view.frame.width - 45
         
         scrollView = UIScrollView(frame: CGRect(x: 15, y: 0, width: w, height: view.frame.height))
         scrollView?.autoresizingMask = [.flexibleLeftMargin, .flexibleWidth, .flexibleRightMargin, .flexibleTopMargin, .flexibleHeight, .flexibleBottomMargin]
@@ -50,7 +50,7 @@ class PageVC: UIViewController {
         attrTxt = ContentManager.shared.attributContents(pageNum)
         lblText?.attributedText = attrTxt
         
-        let w = view.frame.width - 20
+        let w = view.frame.width - 45
         let h = attrTxt!.sizeFittingWidth(w).height
         
         scrollView?.contentSize = CGSize(width: w, height: h)

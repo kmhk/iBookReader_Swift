@@ -99,7 +99,7 @@ class TableModeVC: UITableViewController {
                 let orgRect = tableView.rectForRow(at: indexPath)
                 let scnRect = tableView.convert(orgRect, to: tableView.superview)
                 
-                if scnRect.minY < tableView.frame.midY && (y1 < scnRect.minY || y1 == 0) && scnRect.maxY > 0 {
+                if scnRect.minY < (tableView.frame.midY / 3) && (y1 < scnRect.minY || y1 == 0) && scnRect.maxY > 0 {
                     y1 = scnRect.minY
                     a1 = i
                 }
