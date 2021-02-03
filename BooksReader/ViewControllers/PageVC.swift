@@ -43,14 +43,29 @@ class PageVC: UIViewController {
     }
     
     
-    func configUI() {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        if UIDevice.current.orientation.isLandscape {
+            print("PageVC changed to Landscape")
+        } else {
+            print("PageVC changed to Portrait")
+        }
+        
+        configUI(size: size)
+    }
+    
+    
+    func configUI(size: CGSize? = nil) {
         view.backgroundColor = SettingManager.bkColor
         lblText?.textColor = SettingManager.txtColor
         
         attrTxt = ContentManager.shared.attributContents(pageNum)
         lblText?.attributedText = attrTxt
         
-        let w = view.frame.width - 45
+        let sz = (size == nil ? view.frame.size : size!)
+        
+        let w = sz.width - 45
         let h = attrTxt!.sizeFittingWidth(w).height
         
         scrollView?.contentSize = CGSize(width: w, height: h)
