@@ -26,7 +26,7 @@ class ReaderVC: UIViewController {
     @IBOutlet weak var horzSlider: UISlider!
     
     @IBOutlet weak var scrollModeView: UIView!
-    var scrollModeVC: TableModeVC?
+    var scrollModeVC: ScrollModeVC?
     
     @IBOutlet weak var pageModeView: UIView!
     var pageModeVC: PageModeVC?
@@ -75,7 +75,11 @@ class ReaderVC: UIViewController {
             pageModeVC = vc
             pageModeVC?.readerDelegate = self
             return
-        } else if let vc = segue.destination as? TableModeVC {
+//        } else if let vc = segue.destination as? TableModeVC {
+//            scrollModeVC = vc
+//            scrollModeVC?.readerDelegate = self
+//            return
+        } else if let vc = segue.destination as? ScrollModeVC {
             scrollModeVC = vc
             scrollModeVC?.readerDelegate = self
             return

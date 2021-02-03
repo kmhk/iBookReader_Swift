@@ -119,7 +119,7 @@ extension ScrollModeVC: UICollectionViewDelegateFlowLayout {
                 let orgRect = collectionView.layoutAttributesForItem(at: indexPath)!.frame
                 let scnRect = collectionView.convert(orgRect, to: collectionView.superview)
                 
-                if scnRect.minY < collectionView.frame.midY && (y1 < scnRect.minY || y1 == 0) && scnRect.maxY > 0 {
+                if (scnRect.minY < collectionView.frame.midY / 3) && (y1 < scnRect.minY || y1 == 0) && scnRect.maxY > 0 {
                     y1 = scnRect.minY
                     a1 = i
                 }
