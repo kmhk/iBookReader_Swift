@@ -25,7 +25,10 @@ class ScrollModeVC: UICollectionViewController {
     
     func configUI() {
         view.backgroundColor = SettingManager.bkColor
-        collectionView.reloadData()
+        //collectionView.reloadData()
+        
+        let indexPaths = collectionView.indexPathsForVisibleItems
+        collectionView.reloadItems(at: indexPaths)
     }
     
     

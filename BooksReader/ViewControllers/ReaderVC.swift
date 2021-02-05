@@ -291,7 +291,7 @@ class ReaderVC: UIViewController {
     func changeScreenMode() {
         if SettingManager.changeReadMode() == .fullscreen {
             self.navigationController?.setNavigationBarHidden(true, animated: true)
-            self.setNeedsStatusBarAppearanceUpdate()
+// -- no need this code            self.setNeedsStatusBarAppearanceUpdate()
             
             UIView.animate(withDuration: 0.2) {
                 self.viewStatus.alpha = 0
@@ -314,7 +314,7 @@ class ReaderVC: UIViewController {
             
         } else {
             self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.setNeedsStatusBarAppearanceUpdate()
+// -- no need this code            self.setNeedsStatusBarAppearanceUpdate()
             
             self.viewStatus.isHidden = false
             self.viewStatus.alpha = 0
